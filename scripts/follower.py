@@ -239,12 +239,12 @@ def follower():
 
     rospy.Subscriber("/camera/depth/points", PointCloud2, pointcloud_callback)
 
-    r = rospy.Rate(1)
+    r = rospy.Rate(10)
     while not rospy.is_shutdown():
       if turn_angle:
         if abs(turn_angle) < 0.1:
-          if (distance > 1.0):
-            forward = 1.0
+          if (distance > 1.5):
+            forward = 0.5
           else:
             forward = 0.0
         else:
