@@ -212,20 +212,25 @@ def get_min_point(points):
 
 
 turn_angle = None
+distance = None
 
 def pointcloud_callback(cloud):
     points = [x for x in read_points(cloud, ['x', 'y', 'z'], skip_nans=True)]
     min_point = get_min_point(points)
-    if min_point:
-      angle = get_angle(min_point)
-    else:
-      angle = None
 
-    print min_point
-    print angle
 
     global turn_angle
-    turn_angle = angle
+    global distance
+
+    if min_point:
+      turn_angle = get_angle(min_point)
+      distance = get_distance(min_point)
+    else:
+      turn_angle = None
+      distance = None
+
+    print "angle: ", turn_angle
+    print "distance: ", distance
 
 def follower():
     pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
@@ -237,10 +242,17 @@ def follower():
     r = rospy.Rate(1)
     while not rospy.is_shutdown():
       if turn_angle:
-        angle = turn_angle
+        if abs(turn_angle) < 0.1:
+          if (distance > 1.0):
+            forward = 1.0
+          else:
+            forward = 0.0
+        else:
+          forward = 0.0
+        msg = Twist(Vector3(forward, 0.0, 0.0), Vector3(0.0, 0.0, turn_angle))
       else:
         angle = 0.5
-      msg = Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, angle))
+        msg = Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.5))
       pub.publish(msg)
       r.sleep()
 
