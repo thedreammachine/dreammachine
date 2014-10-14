@@ -211,6 +211,7 @@ def get_min_point(points):
     return min_point
 
 
+stale = True
 turn_angle = None
 distance = None
 
@@ -218,7 +219,7 @@ def pointcloud_callback(cloud):
     points = [x for x in read_points(cloud, ['x', 'y', 'z'], skip_nans=True)]
     min_point = get_min_point(points)
 
-
+    global stale
     global turn_angle
     global distance
 
@@ -229,22 +230,32 @@ def pointcloud_callback(cloud):
       turn_angle = None
       distance = None
 
+    stale = False
+
     print "angle: ", turn_angle
     print "distance: ", distance
 
 def follower():
+    global stale
+
     pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
 
     rospy.init_node('follower', anonymous=True)
 
-    rospy.Subscriber("/camera/depth/points", PointCloud2, pointcloud_callback)
+    rospy.Subscriber("/camera/depth_registered/points", PointCloud2, pointcloud_callback)
 
     r = rospy.Rate(10)
     while not rospy.is_shutdown():
+      if stale:
+        r.sleep()
+        continue
+
+      stale = True
+
       if turn_angle:
-        if abs(turn_angle) < 0.1:
-          if (distance > 1.5):
-            forward = 0.5
+        if abs(turn_angle) < 0.25:
+          if (distance > 0.75):
+            forward = 0.25
           else:
             forward = 0.0
         else:
