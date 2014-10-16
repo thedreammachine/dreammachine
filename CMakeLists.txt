@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   geometry_msgs
   kobuki_msgs
+  visualization_msgs
 )
 
 ## System dependencies are found with CMake's conventions
