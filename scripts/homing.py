@@ -45,12 +45,19 @@ class PathMarker:
 
             pos_epsilon = 0.1
             angle_epsilon = 0.1
+            linear_speed = 0.3
+            angular_multiplier = 0.5
             msg = None
             if abs(p.y) > pos_epsilon:
                 if abs(math.pi/2.0 - yaw) > angle_epsilon:
-                    msg = Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, math.pi/2.0 - yaw))
+                    msg = Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, angular_multiplier * (math.pi/2.0 - yaw)))
                 else:
-                    msg = Twist(Vector3(-sign(p.y), 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
+                    msg = Twist(Vector3(-linear_speed * sign(p.y), 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
+            elif abs(p.x) > pos_epsilon:
+                if abs(yaw) > angle_epsilon:
+                    msg = Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, angular_multiplier * (-yaw)))
+                else:
+                    msg = Twist(Vector3(-linear_speed * sign(p.x), 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
 
             if msg:
                 self.velocity_publisher.publish(msg)
