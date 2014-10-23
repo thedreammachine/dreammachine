@@ -8,6 +8,7 @@ import math
 import tf
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 import time
+import pickle
 
 def sign(x):
     if x < 0:
@@ -28,9 +29,18 @@ def get_pose_stamped(x, y, theta):
 
     return PoseStamped(header, pose)
 
+def get_x_y_theta(trans, rot):
+    _, _, yaw = euler_from_quaternion(rot)
+    x, y, _ = trans
+    return x, y, yaw
+
 class Navigation:
     def __init__(self):
         rospy.init_node('navigator', anonymous=True)
+
+        self.tf_listener = tf.TransformListener()
+        self.base_frame = '/map'
+        self.odom_frame = '/base_link'
 
         self.pose_pub = rospy.Publisher('/move_base_simple/goal', PoseStamped)
         self.r = rospy.Rate(10)
@@ -40,6 +50,11 @@ class Navigation:
             'rotated_home' : (-2.9, 1.4, 3.14),
         }
 
+
+    def get_odom(self):
+        (trans, rot) = self.tf_listener.lookupTransform(self.base_frame,
+                       self.odom_frame, rospy.Time(0))
+        return get_x_y_theta(trans, rot)
 
     def loop(self):
         while not rospy.is_shutdown():
@@ -62,19 +77,33 @@ class Navigation:
 
         tokens = s.split()
         if len(tokens) != 2:
-            return None
+            return
 
-        command, pos_name = tokens
+        command, arg = tokens
         if command == 'goto':
-            if not pos_name in self.pos_dict:
-                print 'no such position:', pos_name
-                return None
-            self.goto(self.pos_dict[pos_name])
+            if not arg in self.pos_dict:
+                print 'no such position:', arg
+                return
+            self.goto(self.pos_dict[arg])
 
-        if command == 'save':
-            pass
+        elif command == 'save':
+            current_pos = self.get_odom()
+            print "saving", current_pos, "as", arg
+            self.pos_dict[arg] = current_pos
 
-        return None
+        elif command == 'print':
+            print (arg + ":"), self.pos_dict.get(arg)
+
+        elif command == 'save_to':
+            with open(arg, 'w') as f:
+                pickle.dump(self.pos_dict, f)
+
+        elif command == 'load_from':
+            with open(arg, 'r') as f:
+                self.pos_dict = pickle.load(f)
+
+        else:
+            print "command not recognized"
 
 if __name__ == '__main__':
     try:
