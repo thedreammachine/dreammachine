@@ -7,6 +7,7 @@ project(dream_machine)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  ar_track_alvar
   std_msgs
   sensor_msgs
   message_generation
