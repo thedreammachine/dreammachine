@@ -44,7 +44,7 @@ class voice_handler:
         rospy.Service("~stop", Empty, self.stop)
 
         #Disable self on bootup
-        self.started = False
+        self.started = True
 
         r = rospy.Rate(10.0)
         while not rospy.is_shutdown():
@@ -55,7 +55,7 @@ class voice_handler:
         rospy.loginfo(msg.data)
 
         #Only handle voice commands if started
-        if started:
+        if self.started:
             #Speed Commands
             if msg.data.find("full speed") > -1:
                 if self.speed == 0.2:
@@ -98,17 +98,23 @@ class voice_handler:
 
             #Music Commands
             if msg.data.find("play") > -1:
-                self.cmd_vel_pub.publish(PLAY)
+                self.music_commands_pub.publish(PLAY)
+                self.voice_actions_pub.publish(VOICE_PLAY)
             elif msg.data.find("stop") > -1:
-                self.cmd_vel_pub.publish(STOP)
+                self.music_commands_pub.publish(STOP)
+                self.voice_actions_pub.publish(VOICE_STOP)
             elif msg.data.find("pause") > -1:
-                self.cmd_vel_pub.publish(PAUSE)
+                self.music_commands_pub.publish(PAUSE)
+                self.voice_actions_pub.publish(VOICE_PAUSE)
             elif msg.data.find("unpause") > -1:
-                self.cmd_vel_pub.publish(UNPAUSE)
+                self.music_commands_pub.publish(UNPAUSE)
+                self.voice_actions_pub.publish(VOICE_UNPAUSE)
             elif msg.data.find("volume up") > -1:
-                self.cmd_vel_pub.publish(VOLUME_UP)
+                self.music_commands_pub.publish(VOLUME_UP)
+                self.voice_actions_pub.publish(VOICE_VOLUME_UP)
             elif msg.data.find("volume down") > -1:
-                self.cmd_vel_pub.publish(VOLUME_DOWN)
+                self.music_commands_pub.publish(VOLUME_DOWN)
+                self.voice_actions_pub.publish(VOICE_VOLUME_DOWN)
 
             self.cmd_vel_pub.publish(self.msg)
 

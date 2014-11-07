@@ -1,4 +1,8 @@
 <launch>
-  <node name="music_player" type="music_player.py" pkg="dream_machine"/>
+  <node name="recognizer" pkg="pocketsphinx" type="recognizer.py">
+    <param name="lm" value="$(find dream_machine)/voice/commands.lm"/>
+    <param name="dict" value="$(find dream_machine)/voice/commands.dic"/>
+  </node>
+
   <node name="voice_handler" type="voice_handler.py" pkg="dream_machine"/>
 </launch>
