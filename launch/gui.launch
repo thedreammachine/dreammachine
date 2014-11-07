@@ -1,0 +1,3 @@
+<launch>
+  <node name="music_player" type="music_player.py" pkg="dream_machine"/>
+</launch>
