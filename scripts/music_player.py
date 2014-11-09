@@ -7,6 +7,7 @@ import os
 from music_constants import *
 
 from std_msgs.msg import String
+from dream_machine.msg import MusicCommand
 
 MUSIC_ROOT = os.environ['HOME'] + '/dream_machine_music/'
 
@@ -20,7 +21,7 @@ class MusicPlayer:
     def __init__(self):
         rospy.init_node('music_player', anonymous=True)
 
-        rospy.Subscriber("/music_commands", String, self.command_callback)
+        rospy.Subscriber("/music_commands", MusicCommand, self.command_callback)
         pygame.mixer.init()
         music.load(MUSIC_ROOT + MUSIC_FILE)
 
@@ -28,7 +29,7 @@ class MusicPlayer:
         def change_volume(delta):
             music.set_volume(music.get_volume() + delta)
 
-        command = command.data
+        command = command.command
 
         if command == PLAY:
             music.play()

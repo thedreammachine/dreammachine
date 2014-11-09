@@ -23,6 +23,7 @@ from music_constants import *
 from std_srvs.srv import *
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
+from dream_machine.msg import MusicCommand
 
 class voice_handler:
 
@@ -34,7 +35,7 @@ class voice_handler:
         #publish to cmd_vel for movement and
         #publish to music commands for music control
         self.cmd_vel_pub = rospy.Publisher('cmd_vel', Twist)
-        self.music_commands_pub = rospy.Publisher('music_commands', String)
+        self.music_commands_pub = rospy.Publisher('music_commands', MusicCommand)
         self.voice_actions_pub = rospy.Publisher('~voice_actions', String)
         #subscribe to output for text of speech recognized
         rospy.Subscriber('recognizer/output', String, self.speechCb)
@@ -98,22 +99,22 @@ class voice_handler:
 
             #Music Commands
             if msg.data.find("play") > -1:
-                self.music_commands_pub.publish(PLAY)
+                self.music_commands_pub.publish(MusicCommand(PLAY, []))
                 self.voice_actions_pub.publish(VOICE_PLAY)
             elif msg.data.find("stop") > -1:
-                self.music_commands_pub.publish(STOP)
+                self.music_commands_pub.publish(MusicCommand(STOP, []))
                 self.voice_actions_pub.publish(VOICE_STOP)
             elif msg.data.find("pause") > -1:
-                self.music_commands_pub.publish(PAUSE)
+                self.music_commands_pub.publish(MusicCommand(PAUSE, []))
                 self.voice_actions_pub.publish(VOICE_PAUSE)
             elif msg.data.find("unpause") > -1:
-                self.music_commands_pub.publish(UNPAUSE)
+                self.music_commands_pub.publish(MusicCommand(UNPAUSE, []))
                 self.voice_actions_pub.publish(VOICE_UNPAUSE)
             elif msg.data.find("volume up") > -1:
-                self.music_commands_pub.publish(VOLUME_UP)
+                self.music_commands_pub.publish(MusicCommand(VOLUME_UP, []))
                 self.voice_actions_pub.publish(VOICE_VOLUME_UP)
             elif msg.data.find("volume down") > -1:
-                self.music_commands_pub.publish(VOLUME_DOWN)
+                self.music_commands_pub.publish(MusicCommand(VOLUME_DOWN, []))
                 self.voice_actions_pub.publish(VOICE_VOLUME_DOWN)
 
             self.cmd_vel_pub.publish(self.msg)
