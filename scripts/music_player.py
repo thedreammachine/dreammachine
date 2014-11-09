@@ -1,5 +1,14 @@
 #!/usr/bin/python
 
+"""
+music_player.py listens to music commands (play, pause, volume down, etc.) and
+plays music accordingly.
+
+listeners:
+    /music_commands (dream_machine/MusicCommand) - executes the given music
+      command.
+"""
+
 import rospy
 import pygame
 from pygame.mixer import music
