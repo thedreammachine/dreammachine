@@ -19,7 +19,6 @@ import rospy
 import math
 
 from voice_constants import *
-from music_constants import *
 from std_srvs.srv import *
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
@@ -99,22 +98,22 @@ class voice_handler:
 
             #Music Commands
             if msg.data.find("play") > -1:
-                self.music_commands_pub.publish(MusicCommand(PLAY, []))
+                self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
                 self.voice_actions_pub.publish(VOICE_PLAY)
             elif msg.data.find("stop") > -1:
-                self.music_commands_pub.publish(MusicCommand(STOP, []))
+                self.music_commands_pub.publish(MusicCommand(MusicCommand.STOP, []))
                 self.voice_actions_pub.publish(VOICE_STOP)
             elif msg.data.find("pause") > -1:
-                self.music_commands_pub.publish(MusicCommand(PAUSE, []))
+                self.music_commands_pub.publish(MusicCommand(MusicCommand.PAUSE, []))
                 self.voice_actions_pub.publish(VOICE_PAUSE)
             elif msg.data.find("unpause") > -1:
-                self.music_commands_pub.publish(MusicCommand(UNPAUSE, []))
+                self.music_commands_pub.publish(MusicCommand(MusicCommand.UNPAUSE, []))
                 self.voice_actions_pub.publish(VOICE_UNPAUSE)
             elif msg.data.find("volume up") > -1:
-                self.music_commands_pub.publish(MusicCommand(VOLUME_UP, []))
+                self.music_commands_pub.publish(MusicCommand(MusicCommand.VOLUME_UP, []))
                 self.voice_actions_pub.publish(VOICE_VOLUME_UP)
             elif msg.data.find("volume down") > -1:
-                self.music_commands_pub.publish(MusicCommand(VOLUME_DOWN, []))
+                self.music_commands_pub.publish(MusicCommand(MusicCommand.VOLUME_DOWN, []))
                 self.voice_actions_pub.publish(VOICE_VOLUME_DOWN)
 
             self.cmd_vel_pub.publish(self.msg)

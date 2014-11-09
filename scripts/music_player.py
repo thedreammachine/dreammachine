@@ -4,7 +4,6 @@ import rospy
 import pygame
 from pygame.mixer import music
 import os
-from music_constants import *
 
 from std_msgs.msg import String
 from dream_machine.msg import MusicCommand
@@ -31,17 +30,17 @@ class MusicPlayer:
 
         command = command.command
 
-        if command == PLAY:
+        if command == MusicCommand.PLAY:
             music.play()
-        elif command == STOP:
+        elif command == MusicCommand.STOP:
             music.stop()
-        elif command == PAUSE:
+        elif command == MusicCommand.PAUSE:
             music.pause()
-        elif command == UNPAUSE:
+        elif command == MusicCommand.UNPAUSE:
             music.unpause()
-        elif command == VOLUME_UP:
+        elif command == MusicCommand.VOLUME_UP:
             change_volume(VOLUME_CHANGE)
-        elif command == VOLUME_DOWN:
+        elif command == MusicCommand.VOLUME_DOWN:
             change_volume(-VOLUME_CHANGE)
         else:
             print 'command not found:', command
