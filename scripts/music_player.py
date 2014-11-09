@@ -22,7 +22,8 @@ MUSIC_ROOT = os.environ['HOME'] + '/dream_machine_music/'
 MUSIC_FILE = 'rick-roll.wav'
 
 # volume ranges from 0.0 to 1.0
-VOLUME_CHANGE = 0.1
+INITIAL_VOLUME = 0.50
+VOLUME_CHANGE = 0.25
 
 # TODO support loading other files, looping, queuing.
 class MusicPlayer:
@@ -32,6 +33,7 @@ class MusicPlayer:
         rospy.Subscriber("/music_commands", MusicCommand, self.command_callback)
         pygame.mixer.init()
         music.load(MUSIC_ROOT + MUSIC_FILE)
+        music.set_volume(INITIAL_VOLUME)
 
     def command_callback(self, command):
         def change_volume(delta):
