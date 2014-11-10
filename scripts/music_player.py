@@ -24,7 +24,6 @@ MUSIC_ROOT = os.environ['HOME'] + '/dream_machine_music/'
 INITIAL_VOLUME = 0.50
 VOLUME_CHANGE = 0.25
 
-# TODO support loading other files, looping, queuing.
 class MusicPlayer:
     def __init__(self):
         rospy.init_node('music_player', anonymous=True)
@@ -36,20 +35,13 @@ class MusicPlayer:
         # for the mixer
         pygame.mixer.init()
 
-        self.event_id = pygame.USEREVENT
-        self.song_queue = Queue.Queue()
-
-        music.set_endevent(self.event_id)
-        self.current_song = None
         music.set_volume(INITIAL_VOLUME)
 
-        r = rospy.Rate(10)
-        while not rospy.is_shutdown():
-          self.loop()
-          r.sleep()
+        self.loaded = False
 
     def load_song(self, song):
         music.load(MUSIC_ROOT + song)
+        self.loaded = True
 
     def command_callback(self, message):
         def change_volume(delta):
@@ -59,8 +51,7 @@ class MusicPlayer:
         args = message.args
 
         if command == MusicCommand.PLAY:
-            if self.current_song:
-                self.load_song(self.current_song)
+            if self.loaded:
                 music.play()
         elif command == MusicCommand.STOP:
             music.stop()
@@ -72,35 +63,16 @@ class MusicPlayer:
             change_volume(VOLUME_CHANGE)
         elif command == MusicCommand.VOLUME_DOWN:
             change_volume(-VOLUME_CHANGE)
-        elif command == MusicCommand.NEXT_SONG:
-            self.next_song()
 
         # commands with args
-        elif command == MusicCommand.QUEUE:
-            if not self.current_song:
-                self.current_song = args[0]
-            else:
-                self.song_queue.put_nowait(args[0])
+        elif command == MusicCommand.LOAD:
+            self.load_song(args[0])
 
         else:
             print 'command not found:', command
 
-    def next_song(self):
-        try:
-          next_song = self.song_queue.get_nowait()
-          self.current_song = next_song
-          self.load_song(next_song)
-          music.play()
-        except Queue.Empty:
-          self.current_song = None
-          music.stop()
-
-    def loop(self):
-        for event in pygame.event.get():
-            if event.type == self.event_id:
-                self.next_song()
-
 if __name__ == '__main__':
     try:
         MusicPlayer()
+        rospy.spin()
     except rospy.ROSInterruptException: pass

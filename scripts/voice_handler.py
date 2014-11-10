@@ -105,7 +105,7 @@ class voice_handler:
             #Music Commands
             if msg.data in self.music_corpus:
                 self.music_commands_pub.publish(
-                  MusicCommand(MusicCommand.QUEUE, [self.music_corpus[msg.data]]))
+                  MusicCommand(MusicCommand.LOAD, [self.music_corpus[msg.data]]))
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
 
             elif msg.data.find("play") > -1:
@@ -114,12 +114,12 @@ class voice_handler:
             elif msg.data.find("stop") > -1:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.STOP, []))
                 self.voice_actions_pub.publish(VOICE_STOP)
-            elif msg.data.find("pause") > -1:
-                self.music_commands_pub.publish(MusicCommand(MusicCommand.PAUSE, []))
-                self.voice_actions_pub.publish(VOICE_PAUSE)
             elif msg.data.find("unpause") > -1:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.UNPAUSE, []))
                 self.voice_actions_pub.publish(VOICE_UNPAUSE)
+            elif msg.data.find("pause") > -1:
+                self.music_commands_pub.publish(MusicCommand(MusicCommand.PAUSE, []))
+                self.voice_actions_pub.publish(VOICE_PAUSE)
             elif msg.data.find("volume up") > -1:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.VOLUME_UP, []))
                 self.voice_actions_pub.publish(VOICE_VOLUME_UP)
