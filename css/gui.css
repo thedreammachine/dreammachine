@@ -1,0 +1,39 @@
+#image-div {
+  border: 5px solid #101010;
+  width: 65%;
+  height: 550px;
+  float: left;
+  margin-bottom: 20px;
+}
+
+#command-div {
+  border: 5px solid #101010;
+  width: 30%;
+  height: 550px;
+  float: right;
+  overflow: scroll;
+}
+
+#music-div {
+  border: 5px solid #101010;
+  height: 100px;
+  clear: both;
+}
+
+#previous-commands {
+  border: 5px solid #101010;
+  height: 250px;
+  margin: 20px;
+}
+
+#image-div, #command-div, #music-div {
+  padding: 10px 10px;
+  text-align: center;
+}
+
+#arrow-commands {
+  text-align: center;
+  width: 120px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}

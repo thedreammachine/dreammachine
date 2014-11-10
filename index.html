@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>The Dream Machine Web GUI</title>
+    <!-- usuage: 1) launch the turtlebot 2) ./web_server.py 3) http://localhost:31337/ -->
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/starter-template.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+
+    <!-- My Own gui.css: -->
+    <link href="css/gui.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- image viewer -->
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.min.js"></script>
+
+    <!-- teleop -->
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.min.js"></script>
+
+
+    <!-- For the web image viewer setup: -->
+    <script type="text/javascript">
+      /**
+       * Setup all visualization & GUI elements when the page is loaded. 
+       */
+      function init() {
+        // Create the main viewer.
+        // var viewer = new MJPEGCANVAS.Viewer({
+        //   divID : 'mjpeg',
+        //   host : 'localhost',
+        //   width : 640,
+        //   height : 480,
+        //   topic : '/camera/rgb/image_color'
+        // });
+
+      //   // Connecting to ROS.
+      //   var ros = new ROSLIB.Ros({
+      //     url : 'ws://softshell.cs.washington.edu:9090'
+      //   });
+
+      //   // Initialize the teleop.
+      //   var teleop = new KEYBOARDTELEOP.Teleop({
+      //     ros : ros,
+      //     topic : '/base_controller/command'
+      //   });
+
+      //   // Create a UI slider using JQuery UI.
+      //   $('#speed-slider').slider({
+      //     range : 'min',
+      //     min : 0,
+      //     max : 100,
+      //     value : 90,
+      //     slide : function(event, ui) {
+      //       // Change the speed label.
+      //       $('#speed-label').html('Speed: ' + ui.value + '%');
+      //       // Scale the speed.
+      //       teleop.scale = (ui.value / 100.0);
+      //     }
+      //   });
+
+      //   // Set the initial speed .
+      //   $('#speed-label').html('Speed: ' + ($('#speed-slider').slider('value')) + '%');
+      //   teleop.scale = ($('#speed-slider').slider('value') / 100.0);
+      }
+
+      // $(document).ready(init);
+    </script>
+  </head>
+
+  <body onload="init()">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">The Dream Machine</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="about.html">Home</a></li>
+            <li class="active"><a href="index.html">GUI</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+        <!-- For the ROS image viewer: -->
+        <div id="image-div">
+          <h1>Camera</h1>
+          <div id="mjpeg"></div>
+          <img src="http://localhost:8080/stream?topic=/camera/rgb/image_raw" alt="Camera Not Available (Only works on the localhost.)" style="width:560px;height:420px"/>
+          <!-- 640/480 -->
+        </div>
+      </div>
+
+      <!-- Teleop: -->
+      <div class="starter-template">
+        <div id="command-div">
+          <h1>Command</h1>
+          <div id="speed-label"></div>
+          <div id="speed-slider"></div>
+          <div id="arrow-commands">
+            <table>
+              <tr>
+                <td></td>
+                <!-- forward -->
+                <td><button class="btn btn-primary" onmousedown="base_command_start(0.1,0,0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-up"></span></button></td>
+                <td></td>
+              </tr>
+              <tr>
+                <!-- left -->
+                <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, 0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                <td></td>
+                <!-- right -->
+                <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, -0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-right"></span></button></td>
+              </tr>
+              <tr>
+                <td></td>
+                <!-- backward -->
+                <td><button class="btn btn-primary" onmousedown="base_command_start(-0.1, 0, 0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-down"></span></button></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+          <div id="previous-commands">
+            <h3>Previous Commands</h3>
+            ...
+          </div>
+        </div>
+      </div>
+
+      <div class="starter-template">
+        <div id="music-div">
+          <h3>
+            Music: Never Gonna Give You Up
+            <button id="play-music" class="btn btn-primary"><span class="glyphicon glyphicon-play"></span></button>
+            <button id="stop-music" class="btn btn-primary"><span class="glyphicon glyphicon-pause"></span></button>
+          </h3>
+        </div>
+      </div>
+
+    </div><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="js/ie10-viewport-bug-workaround.js"></script> -->
+    <script src="js/kinetic-v4.7.2.min.js"></script>
+    <script src="js/command.js"></script>
+  </body>
+</html>

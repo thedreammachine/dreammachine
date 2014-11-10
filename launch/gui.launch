@@ -7,4 +7,6 @@
   <node name="voice_handler" type="voice_handler.py" pkg="dream_machine">
   	<remap from="cmd_vel" to="mobile_base/commands/velocity"/>
   </node>
+
+  <node name="web_server" type="web_server.py" pkg="dream_machine"/>
 </launch>

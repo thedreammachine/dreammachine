@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>The Dream Machine Web GUI</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/starter-template.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">The Dream Machine</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="about.html">Home</a></li>
+            <li><a href="index.html">GUI</a></li>
+            <li class="active"><a href="blog.html">Blog</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+      <h3>Blog #5</h3>
+
+      <ol>
+        <li>
+          Fiducial tracking:<br/>
+          <iframe width="560" height="315" src="//www.youtube.com/embed/7EtBqYvfVtg" frameborder="0" allowfullscreen></iframe>
+        </li>
+        <li>
+          Leg Detector <br/>
+
+          We were unable to get the leg detector working.
+
+          We tried using softshell , and made sure to remove the scan:=base_scan argument. Still nothing. We tried several other things based on searches Adam did, including changing the frame from odom_combined to camera_depth_frame (in a bunch of source files). We also tried running it with robot_pose_ekf open because somebody said that might help and the rqt graph indicated it depended on it.
+
+          We made sure that valid data was being published to /scan. We tried looking at the rqt_graph thing but could not make sense of the topics being published/listened to. We looked through the source code for the leg_detector to see if there were any constants that we could plausibly change. None of these things work.
+
+          We didn't try using pointcloud_to_laserscan because we already have data being published on /scan.
+        </li>
+      </ol>
+
+      <hr/>
+      <h3>Blog #4</h3>
+
+      <ol>
+        <li>Projects with related components:<br/>
+          <ul>
+            <li>
+              <a href="http://www.keecker.com/">Keecker</a>, a home media robot.
+            </li>
+            <li>
+              <a href="http://www.thingiverse.com/thing:10253">Turtlebot speaker mounts</a>
+            </li>
+            <li>
+              <a href="https://github.com/adamw/turtlebot">Web UI for turtlebot</a>
+            </li>
+            <li>
+              <a href="http://www.pirobot.org/blog/0022/">Turtlebot speech recognition</a>
+            </li>
+            <li>
+              <a href="https://github.com/jdorweiler/color_blob_tracking">Color blob tracking</a>
+            </li>
+            <li>
+              <a href="http://htutkhwin.wix.com/maze-solver-2000">Maze solver</a>
+            </li>
+            <li>
+              <a href="http://www.iheartrobotics.com/2013/07/turtlebot-wanderer.html">Wanderer (move about randomly while avoiding obstacles)</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          Lab 7 video:<br/>
+          This video shows our command line interface used to direct our turtlebot to
+          specific locations and regions. A region is represented as a circle, and
+          when sent to a region, the robot picks a random point in the region and
+          moves there.<br/>
+          <iframe width="560" height="315" src="//www.youtube.com/embed/DFNAi7T45Pw" frameborder="0" allowfullscreen></iframe>
+        </li>
+      </ol>
+
+      <hr/>
+      <h3>Blog #3</h3>
+
+      <ol>
+        <li>Requirements and Plan: <br/>
+          <a href="images/plan.jpg"><img src="images/plan.jpg" width="750px"/></a>
+        </li>
+        <li>Shopping list: <br/>
+          We decided to get two cheap speakers and two cheap headsets with microphones
+          so that we would have a couple options, and we could use whatever works
+          best.
+          <ul>
+            <li><a href="http://www.amazon.com/AmazonBasics-Powered-Computer-Speakers-A100/dp/B00GHY5F3K/">Speaker 1</a></li>
+            <li><a href="http://www.amazon.com/GUARANTEE-Rechargeable-Expandable-Resonator-Smartphones/dp/B007OYAVLI/">Speaker 2</a></li>
+            <li><a href="http://www.amazon.com/Plantronics-Audio-326-Stereo-Headset/dp/B001S2RCXW/">Headset 1</a></li>
+            <li><a href="http://www.amazon.com/Stereo-Gaming-Headphone-Headset-Microphone/dp/B00DU2CHE2/">Headset 2</a></li>
+          </ul>
+        </li>
+        <li>Turtlebot homing video: <br/>
+          <iframe width="560" height="315" src="//www.youtube.com/embed/ln3zUHLJEzw"
+              frameborder="0" allowfullscreen></iframe>
+        </li>
+      </ol>
+
+      <hr/>
+      <h3>Blog #2</h3>
+
+      <ol>
+        <li>
+          Finalized project: Mobile Jukebox
+          <p>
+            We will put speakers on top of the turtlebot to make a mobile jukebox.
+            We wanted to make a mobile jukebox because we feel like it will add more
+            uniqueness and spice to people's regular lives and at party events. The
+            mobile jukebox will be more interactive and immerse itself during parties as it
+            will move around the party floor as it see fit or to the sound of the music.
+            It will also have different modes to help people in different situations as
+            described below.
+            <br><br>
+            It will enable several interesting interactive functions:
+            <ul>
+              <li>
+                Voice commands: The jukebox will accept commands via voice. Location
+                or follow mode can be activated, and specific songs can be chosen.
+                Play, pause, and volume control will be supported. We may use a
+                microphone on the turtlebot itself, but it might not work well while
+                songs are playing. We will consider using microphones elsewhere.
+              </li>
+              <li>
+                Follow mode: The jukebox will follow a person around while playing
+                music that they have selected.
+              </li>
+              <li>
+                Location mode: The jukebox will move to a specific point selected from
+                a predefined set of locations and begin playing music.
+              </li>
+              <li>
+                Fiesta mode: The jukebox will move in a set path or to the sound of music
+                in the dance floor to entertain guests.
+              </li>
+              <li>
+                Romantic mode: The jukebox will move toward a person of interest while
+                playing a romantic song with a flower on top of the robot.
+              </li>
+            </ul>
+          </p>
+        </li>
+        <li>
+          Our Storyboard:<br/>
+          <img src="images/storyboard.jpg" width="60%" height="auto"/><br/>
+          <ul>
+            <li>
+              Some big challenges for the mobile jukebox is listening and acknowledging
+              correct voice commands because of the noisy environments that it will operate in.
+              We will make sure to double check the commands for accuracy.
+            </li>
+            <li>
+              Having the mobile jukebox move to the correct locations or moving in such a way
+              that it will interact with the dance floor can be tricky as well. We will need
+              some clever algorithms to tell the robot to move in correct and desired paths.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>
+            This is a video of our turtlebot following Adam. It first rotates to face
+            him, then moves forward. Currently, the data processing is very slow, and
+            it means that the turtlebot moves very slowly.
+          </p>
+          <iframe width="560" height="315" src="//www.youtube.com/embed/WcNAC2cJjg8" frameborder="0" allowfullscreen></iframe>
+        </li>
+      </ol>
+
+      <hr/>
+      <h3>Blog #1</h3>
+
+      <ol>
+
+        <li>Team members:
+          <ul>
+            <li>
+                Adam Stephenson<br/>
+                <img src="images/adam.jpg"/><br/>
+                Adam can juggle and can solve a Rubik's cube in under a minute.
+            </li>
+            <li>
+                Nat Mote<br/>
+                <img src="images/nat.jpg"/><br/>
+                Nat jumps out of airplanes for fun.
+            </li>
+            <li>
+                David Liang<br/>
+                <img src="images/david.jpg"/><br/>
+                David likes to play soccer, and wants to play against robots someday.
+            </li>
+          </ul>
+        </li>
+
+        <li>Ideas:
+          <ul>
+            <li>
+              Mobile Jukebox: The turtlebot responds to spoken requests for specific
+              songs in specific locations
+            </li>
+            <li>
+              Object Locator: Make easy-to-recognize objects, and have the robot
+              search the area for the object.
+            </li>
+            <li>
+              BeerBot: Web interface that allows ordering of beer (or other suitable
+              beverages), using an attendant to load the beverage.
+            </li>
+          </ul>
+        </li>
+
+        <li>Lab 2:<br/>
+          <img src="images/roombo.png" width="100%" height="auto"/><br/>
+          This is a picture of a simulated robot trapped in a room. The robot moves
+          until it collides with a wall, and then backs up and rotates, similar to a
+          roomba. The True/False on the right indicates when the wall was hit.
+        </li>
+      </ol>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="js/ie10-viewport-bug-workaround.js"></script> -->
+  </body>
+</html>
