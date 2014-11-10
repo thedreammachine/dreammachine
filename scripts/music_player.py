@@ -20,8 +20,6 @@ from dream_machine.msg import MusicCommand
 
 MUSIC_ROOT = os.environ['HOME'] + '/dream_machine_music/'
 
-MUSIC_FILE = 'rick-roll.wav'
-
 # volume ranges from 0.0 to 1.0
 INITIAL_VOLUME = 0.50
 VOLUME_CHANGE = 0.25
@@ -42,7 +40,7 @@ class MusicPlayer:
         self.song_queue = Queue.Queue()
 
         music.set_endevent(self.event_id)
-        self.current_song = MUSIC_FILE
+        self.current_song = None
         music.set_volume(INITIAL_VOLUME)
 
         r = rospy.Rate(10)

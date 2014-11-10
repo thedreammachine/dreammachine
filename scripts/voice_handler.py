@@ -18,6 +18,7 @@ import roslib; roslib.load_manifest('pocketsphinx')
 import rospy
 import math
 
+from corpus_builder import CorpusBuilder
 from voice_constants import *
 from std_srvs.srv import *
 from geometry_msgs.msg import Twist
@@ -46,6 +47,8 @@ class voice_handler:
         #Disable self on bootup
         self.started = True
 
+        self.music_corpus = CorpusBuilder().read_song_directory()
+
         r = rospy.Rate(10.0)
         while not rospy.is_shutdown():
             self.cmd_vel_pub.publish(self.msg)
@@ -56,6 +59,8 @@ class voice_handler:
 
         #Only handle voice commands if started
         if self.started:
+
+
             #Speed Commands
             if msg.data.find("full speed") > -1:
                 if self.speed == 0.2:
@@ -96,8 +101,14 @@ class voice_handler:
                 self.msg = Twist()
                 self.voice_actions_pub.publish(VOICE_HALT)
 
+
             #Music Commands
-            if msg.data.find("play") > -1:
+            if msg.data in self.music_corpus:
+                self.music_commands_pub.publish(
+                  MusicCommand(MusicCommand.QUEUE, [self.music_corpus[msg.data]]))
+                self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
+
+            elif msg.data.find("play") > -1:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
                 self.voice_actions_pub.publish(VOICE_PLAY)
             elif msg.data.find("stop") > -1:
@@ -140,4 +151,3 @@ if __name__=="__main__":
         voice_handler()
     except:
         pass
-
