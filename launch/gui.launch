@@ -9,4 +9,10 @@
   </node>
 
   <node name="web_server" type="web_server.py" pkg="dream_machine"/>
+
+  <node name ="web_video_server" type="web_video_server" pkg="web_video_server"/>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" > 
+  	<arg name="port" value="9090"/>
+  </include>
 </launch>

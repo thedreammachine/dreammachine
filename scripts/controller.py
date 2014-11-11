@@ -10,6 +10,7 @@ import rospy
 import threading
 
 from std_msgs.msg import String
+from dream_machine.msg import MusicCommand
 
 from actionlib import SimpleActionClient
 from sensor_msgs.msg import JointState
@@ -34,7 +35,7 @@ class Controller:
 
         # self.msg = Twist()
         self.cmd_vel_pub = rospy.Publisher('/mobile_base/commands/velocity', Twist)
-        # self.music_commands_pub = rospy.Publisher('/music_commands', String)
+        self.music_commands_pub = rospy.Publisher('/music_commands', MusicCommand)
 
     def move_base(self, x, y, z):
         print "MOVING"
@@ -52,7 +53,15 @@ class Controller:
         # self.base_publisher.publish(twist_msg)
         self.cmd_vel_pub.publish(twist_msg)
 
+    def start_music(self, song_filename):
+        self.music_commands_pub.publish(MusicCommand(MusicCommand.LOAD, [song_filename]))
+
     def play_music(self, play_msg):
         print play_msg
-        self.music_commands_pub.publish(play_msg)
+        self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
+
+    def stop_music(self, play_msg):
+        print play_msg
+        self.music_commands_pub.publish(MusicCommand(MusicCommand.STOP, []))
+
 

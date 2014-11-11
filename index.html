@@ -19,6 +19,8 @@
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
     <!-- My Own gui.css: -->
     <link href="css/gui.css" rel="stylesheet">
 
@@ -43,6 +45,38 @@
        * Setup all visualization & GUI elements when the page is loaded. 
        */
       function init() {
+      // $(document).ready(init);
+        var ros = new ROSLIB.Ros({
+            url : 'ws://localhost:9090'
+        });
+
+        ros.on('connection', function() {
+            console.log('Connected to websocket server.');
+        });
+
+        ros.on('error', function(error) {
+            console.log('Error connecting to websocket server: ', error);
+        });
+
+        ros.on('close', function() {
+            console.log('Connection to websocket server closed.');
+        });
+
+        var listener = new ROSLIB.Topic({
+            ros : ros,
+            name : '/voice_handler/voice_actions',
+            messageType : 'std_msgs/String'   
+        });
+
+        listener.subscribe(function(message) {
+            console.log('Received message on ' + listener.name + ': ' + message.data);
+            listener.unsubscribe();
+        });
+
+        console.log(listener);
+
+        alert("HELLO");
+
         // Create the main viewer.
         // var viewer = new MJPEGCANVAS.Viewer({
         //   divID : 'mjpeg',
@@ -82,7 +116,34 @@
       //   teleop.scale = ($('#speed-slider').slider('value') / 100.0);
       }
 
-      // $(document).ready(init);
+      // ros.on('connection', function() {
+      //     console.log('Connected to websocket server.');
+      // });
+
+      // ros.on('error', function(error) {
+      //     console.log('Error connecting to websocket server: ', error);
+      // });
+
+      // ros.on('close', function() {
+      //     console.log('Connection to websocket server closed.');
+      // });
+
+      // var listener = new ROSLIB.Topic({
+      //     ros : ros,
+      //     name : '/voice_handler/voice_actions',
+      //     messageType : 'std_msgs/String'
+      // });
+
+      // listener.subscribe(function(message) {
+      //     console.log('Received message on ' + listener.name + ': ' + message.data);
+      //     alert("hello");
+      //     listener.unsubscribe();
+      // });
+
+      // ros.getParams(function(params) {
+      //     console.log(params);
+      // });
+
     </script>
   </head>
 
@@ -109,7 +170,6 @@
     </nav>
 
     <div class="container">
-
       <div class="starter-template">
         <!-- For the ROS image viewer: -->
         <div id="image-div">
@@ -120,38 +180,52 @@
         </div>
       </div>
 
-      <!-- Teleop: -->
       <div class="starter-template">
         <div id="command-div">
-          <h1>Command</h1>
-          <div id="speed-label"></div>
-          <div id="speed-slider"></div>
-          <div id="arrow-commands">
-            <table>
-              <tr>
-                <td></td>
-                <!-- forward -->
-                <td><button class="btn btn-primary" onmousedown="base_command_start(0.1,0,0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-up"></span></button></td>
-                <td></td>
-              </tr>
-              <tr>
-                <!-- left -->
-                <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, 0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
-                <td></td>
-                <!-- right -->
-                <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, -0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-right"></span></button></td>
-              </tr>
-              <tr>
-                <td></td>
-                <!-- backward -->
-                <td><button class="btn btn-primary" onmousedown="base_command_start(-0.1, 0, 0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-down"></span></button></td>
-                <td></td>
-              </tr>
-            </table>
-          </div>
-          <div id="previous-commands">
-            <h3>Previous Commands</h3>
-            ...
+
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#movement-tab" role="tab" data-toggle="tab">Movement</a></li>
+            <li role="presentation"><a href="#voice-tab" role="tab" data-toggle="tab">Voice</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="movement-tab">
+              <h1>Command</h1>
+              <div id="speed-label"></div>
+              <div id="speed-slider"></div>
+              <div id="arrow-commands">
+                <table>
+                  <tr>
+                    <td></td>
+                    <!-- forward -->
+                    <td><button class="btn btn-primary" onmousedown="base_command_start(0.1,0,0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-up"></span></button></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <!-- left -->
+                    <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, 0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                    <td></td>
+                    <!-- right -->
+                    <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, -0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-right"></span></button></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <!-- backward -->
+                    <td><button class="btn btn-primary" onmousedown="base_command_start(-0.1, 0, 0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-down"></span></button></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="voice-tab">
+              <div id="previous-commands">
+                <h3>Previous Commands</h3>
+                  <ol class="list-group">
+                    <li class="list-group-item">...</li>
+                  </ol>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -159,9 +233,24 @@
       <div class="starter-template">
         <div id="music-div">
           <h3>
-            Music: Never Gonna Give You Up
-            <button id="play-music" class="btn btn-primary"><span class="glyphicon glyphicon-play"></span></button>
-            <button id="stop-music" class="btn btn-primary"><span class="glyphicon glyphicon-pause"></span></button>
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                Music
+                <span class="caret"></span>
+              </button>
+              <ul id="music-dropdown" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li id="cirrus" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Cirrus.wav</a></li>
+                <li id="recurring" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Recurring.wav</a></li>
+                <li id="silver" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Silver.wav</a></li>
+                <li id="never" role="presentation"><a role="menuitem" tabindex="-1" href="#">Rick Astley - Never Gonna Give You Up.wav</a></li>
+                <li id="baby" role="presentation"><a role="menuitem" tabindex="-1" href="#">Sir MixALot - Baby Got Back.wav</a></li>
+                <li id="beautiful" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Beautiful Light.wav</a></li>
+                <li id="energy" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Energy.wav</a></li>
+              </ul>
+
+              <button id="play-music" class="btn btn-primary"><span class="glyphicon glyphicon-play"></span></button>
+              <button id="stop-music" class="btn btn-primary"><span class="glyphicon glyphicon-stop"></span></button>
+            </div>
           </h3>
         </div>
       </div>

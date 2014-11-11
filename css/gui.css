@@ -11,7 +11,7 @@
   width: 30%;
   height: 550px;
   float: right;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 #music-div {
@@ -22,8 +22,9 @@
 
 #previous-commands {
   border: 5px solid #101010;
-  height: 250px;
+  height: 425px;
   margin: 20px;
+  overflow: scroll;
 }
 
 #image-div, #command-div, #music-div {

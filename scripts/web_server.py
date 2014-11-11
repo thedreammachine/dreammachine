@@ -72,10 +72,17 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
             controller.move_base(base_x, base_y, base_z)
 
+        elif command_type == 'song':
+            msg = parameters['song'][0]
+            controller.start_music(msg)
+
         elif command_type == 'music':
             msg = parameters['play'][0]
             if (msg == "play"):
                 controller.play_music("play")
+            elif (msg == "stop"):
+                print "stop"
+                controller.stop_music("stop")
 
         # response
         self.send_response(204)
