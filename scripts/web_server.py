@@ -72,6 +72,12 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
             controller.move_base(base_x, base_y, base_z)
 
+        elif command_type == 'flip_voice_handler':
+            if parameters['turn'][0] == 'on':
+                controller.start_voice_handler()
+            else:
+                controller.stop_voice_handler()
+
         elif command_type == 'song':
             msg = parameters['song'][0]
             controller.start_music(msg)

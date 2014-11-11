@@ -11,6 +11,15 @@ songDictionary["energy"] = "Uppermost - Energy.wav";
 
 $('#myTab a').click(function (e) {
   e.preventDefault()
+  // alert($(this).attr('href'));
+  if($(this).attr('href') == "#voice-tab") {
+    var params = {type:"flip_voice_handler", turn:"on"};
+    $.get("/", params); 
+  } else {
+    var params = {type:"flip_voice_handler", turn:"off"};
+    $.get("/", params);  
+  }
+
   $(this).tab('show')
 })
 
@@ -73,6 +82,14 @@ $(document).keypress(function(e){
     }
 });
 
+$("#forward-command").mousedown(function() {
+    base_command_start(0.1, 0, 0);
+});
+
+$("#forward-command").mouseup(function() {
+    base_command_end();
+});
+
 $("#music-dropdown li").click(function() {
     var songAbbr = $(this).attr('id');
     var songFilename = songDictionary[songAbbr];
@@ -89,6 +106,36 @@ $("#stop-music").click(function() {
     var params = {type:"music", play:"stop"};
     $.get("/", params); 
 });
+
+var ros = new ROSLIB.Ros({
+    url : 'ws://softshell.cs.washington.edu:9090'
+});
+
+ros.on('connection', function() {
+    console.log('Connected to websocket server.');
+});
+
+ros.on('error', function(error) {
+    console.log('Error connecting to websocket server: ', error);
+});
+
+ros.on('close', function() {
+    console.log('Connection to websocket server closed.');
+});
+
+var listener = new ROSLIB.Topic({
+    ros : ros,
+    name : '/voice_handler/voice_actions',
+    messageType : 'std_msgs/String'   
+});
+
+listener.subscribe(function(message) {
+    console.log('Received message on ' + listener.name + ': ' + message.data);
+    $("#command-list").prepend('<li class="list-group-item">' + message.data + '</li>');
+    // listener.unsubscribe();
+});
+
+console.log(listener);
 
 // $("#stop-music").click(function() {
 //     clearInterval(base_interval);

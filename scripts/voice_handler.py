@@ -45,13 +45,14 @@ class voice_handler:
         rospy.Service("~stop", Empty, self.stop)
 
         #Disable self on bootup
-        self.started = True
+        self.started = False
 
         self.music_corpus = CorpusBuilder().read_song_directory()
 
         r = rospy.Rate(10.0)
         while not rospy.is_shutdown():
-            self.cmd_vel_pub.publish(self.msg)
+            if self.started:
+                self.cmd_vel_pub.publish(self.msg)
             r.sleep()
         
     def speechCb(self, msg):
@@ -107,6 +108,7 @@ class voice_handler:
                 self.music_commands_pub.publish(
                   MusicCommand(MusicCommand.LOAD, [self.music_corpus[msg.data]]))
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
+                self.voice_actions_pub.publish(msg.data)
 
             elif msg.data.find("play") > -1:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
@@ -138,11 +140,13 @@ class voice_handler:
     def start(self, req):
         self.started = True
         rospy.loginfo("voice handler started")
+        print "Started on voice handler"
         return EmptyResponse()
 
     def stop(self, req):
         self.started = False
         rospy.loginfo("voice handler stopped")
+        print "Stopped on voice handler"
         return EmptyResponse()
 
 if __name__=="__main__":
