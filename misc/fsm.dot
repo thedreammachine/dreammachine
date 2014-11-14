@@ -1,0 +1,37 @@
+// to generate png:
+// dot -Tpng fsm.dot > fsm.png
+digraph {
+  Start
+  Home [label = "Move towards start location"]
+  subgraph cluster_0 {
+    label = "Follow Mode"
+    Search [label="Search:\nMove around in an attempt\nto locate target"]
+    Following [label="Following:\n move towards target"]
+  }
+
+  subgraph cluster_1 {
+    label = "Location Mode"
+    Moving [label = "Moving to location"]
+    Entertain [label="Entertain:\nremain stationary"]
+  }
+
+  subgraph cluster_2 {
+    label = "Fiesta Mode"
+    Fiesta [label="Fiesta:\nMove arbitrarily\nwhile playing music"]
+  }
+
+  Start->Search [label="Follow Command\n(via Voice)"]
+
+  Search->Following [label="Target Located"]
+  Following->Search [label="Target Lost"]
+
+  Following->Home [label="End Follow Command"]
+  Home->Start [label="Arrived at start location"]
+
+  Start->Moving [label="Location Command\n(via Voice)"]
+  Moving->Entertain [label="Arrived at goal:\nBegin music playback"]
+  Entertain->Home [label="Song completes"]
+
+  Start->Fiesta [label="Fiesta Command\n(via Voice)"]
+  Fiesta->Home [label="End Fiesta Command"]
+}
