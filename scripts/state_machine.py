@@ -5,8 +5,10 @@ voice_handler.py handles control flow for Turtlebot's
 speech recognition. You can control the bot using
 commands found in the corpus file.
 
+listens to:
+    /recognizer/output - incoming voice commands
 publications:
-    cmd_vel (geometry_msgs/Twist)    - order to move
+    /mobile_base/commands/velocity (geometry_msgs/Twist)    - order to move
     music_commands (std_msgs/String) - commands to music player
     ~voice_actions (std_msgs/String) - actions committed
 services:
@@ -17,6 +19,7 @@ services:
 import roslib; roslib.load_manifest('pocketsphinx')
 import rospy
 import math
+from random import random
 
 from corpus_builder import CorpusBuilder
 from voice_constants import *
@@ -25,7 +28,69 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from dream_machine.msg import MusicCommand
 
-class voice_handler:
+class Fiesta:
+    def __init__(self, pub):
+        self.pub = pub
+        self.forward_speed = 0.2
+        self.max_angular_speed = 0.1
+
+        self.countdown = 0
+
+    def state(self):
+        return StateMachine.FIESTA
+
+    def execute(self):
+        if self.countdown == 0:
+            self.twist_message = twist_factory()
+            self.countdown = 10
+
+        self.pub.publish(self.twist_message)
+
+        self.countdown -= 1
+
+        return None
+
+    def cleanup(self):
+        pass
+
+    def twist_factory(self):
+        angular_speed = (random() * 2 - 1) * self.angular_speed
+        fiesta_msg = twist_factory(self.forward_speed, angular_speed)
+        velocity_msg = Twist(Vector3(forward_speed, 0.0, 0.0), Vector3(0.0, 0.0, angular_speed))
+        return velocity_msg
+
+class StateMachine:
+    START = 'start'
+    FIESTA = 'fiesta'
+    GO_HOME = 'go_home'
+
+    def __init__(self):
+        # TODO change back to START
+        self.state = state_factory(StateMachine.FIESTA)
+
+        self.pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
+        self.r = rospy.Rate(10.0)
+
+    def state_factory(self, state):
+        if state == StateMachine.START:
+            return None
+        elif state == StateMachine.FIESTA:
+            return Fiesta(self.pub)
+        elif state == StateMachine.GO_HOME:
+            return None
+
+    def run(self):
+        while not rospy.is_shutdown():
+            self.loop()
+            r.sleep()
+
+    def loop(self):
+        new_state = self.state.execute()
+        if new_state:
+            self.state.cleanup()
+            self.state = self.state_factory(new_state)
+
+class VoiceHandler:
 
     def __init__(self):
         rospy.on_shutdown(self.cleanup)
@@ -38,7 +103,7 @@ class voice_handler:
         self.music_commands_pub = rospy.Publisher('music_commands', MusicCommand)
         self.voice_actions_pub = rospy.Publisher('~voice_actions', String)
         #subscribe to output for text of speech recognized
-        rospy.Subscriber('recognizer/output', String, self.speechCb)
+        rospy.Subscriber('recognizer/output', String, self.speech_callback)
         #start handling voice commands
         rospy.Service("~start", Empty, self.start)
         #stop handling voice commands
@@ -55,7 +120,7 @@ class voice_handler:
                 self.cmd_vel_pub.publish(self.msg)
             r.sleep()
         
-    def speechCb(self, msg):
+    def speech_callback(self, msg):
         rospy.loginfo(msg.data)
 
         #Only handle voice commands if started
@@ -150,8 +215,8 @@ class voice_handler:
         return EmptyResponse()
 
 if __name__=="__main__":
-    rospy.init_node('voice_handler')
+    rospy.init_node('state_machine')
     try:
-        voice_handler()
+        StateMachine().run()
     except:
         pass

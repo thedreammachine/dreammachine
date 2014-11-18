@@ -24,11 +24,6 @@ controller = None
 SCRIPT_DIR = os.path.dirname(__file__)
 
 class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-    # def __init__(self):
-    #     self.msg = Twist()
-    #     self.cmd_vel_pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
-    #     self.music_commands_pub = rospy.Publisher('music_commands', String)
-
     def do_GET(self):
         query_string = urlparse.urlparse(self.path).query
         parameters = urlparse.parse_qs(query_string)
@@ -66,9 +61,6 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             base_z = 0.0
             if 'z' in parameters:
                 base_z = float(parameters['z'][0])
-
-            # twist_msg = Twist(Vector3(base_x, 0.0, 0.0), Vector3(0.0, 0.0, 0))
-            # self.cmd_vel_pub.publish(twist_msg)
 
             controller.move_base(base_x, base_y, base_z)
 

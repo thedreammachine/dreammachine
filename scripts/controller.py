@@ -39,12 +39,6 @@ class Controller:
         self.cmd_vel_pub = rospy.Publisher('/mobile_base/commands/velocity', Twist)
         self.music_commands_pub = rospy.Publisher('/music_commands', MusicCommand)
 
-
-        # r = rospy.Rate(10.0)
-        # while not rospy.is_shutdown():
-        #     self.cmd_vel_pub.publish(self.twist_msg)
-        #     r.sleep()
-
     def move_base(self, x, y, z):
         print "MOVING"
 

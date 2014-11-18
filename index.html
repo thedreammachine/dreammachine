@@ -19,7 +19,6 @@
     <link href="css/starter-template.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
-
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 
     <!-- My Own gui.css: -->
@@ -38,117 +37,9 @@
     <!-- teleop -->
     <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
     <script type="text/javascript" src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.min.js"></script>
-
-
-    <!-- For the web image viewer setup: -->
-    <script type="text/javascript">
-      /**
-       * Setup all visualization & GUI elements when the page is loaded. 
-       */
-      function init() {
-      // $(document).ready(init);
-        // var ros = new ROSLIB.Ros({
-        //     url : 'ws://localhost:9090'
-        // });
-
-        // ros.on('connection', function() {
-        //     console.log('Connected to websocket server.');
-        // });
-
-        // ros.on('error', function(error) {
-        //     console.log('Error connecting to websocket server: ', error);
-        // });
-
-        // ros.on('close', function() {
-        //     console.log('Connection to websocket server closed.');
-        // });
-
-        // var listener = new ROSLIB.Topic({
-        //     ros : ros,
-        //     name : '/voice_handler/voice_actions',
-        //     messageType : 'std_msgs/String'   
-        // });
-
-        // listener.subscribe(function(message) {
-        //     console.log('Received message on ' + listener.name + ': ' + message.data);
-        //     listener.unsubscribe();
-        // });
-
-        // console.log(listener);
-
-        // alert("HELLO");
-
-        // Create the main viewer.
-        // var viewer = new MJPEGCANVAS.Viewer({
-        //   divID : 'mjpeg',
-        //   host : 'localhost',
-        //   width : 640,
-        //   height : 480,
-        //   topic : '/camera/rgb/image_color'
-        // });
-
-      //   // Connecting to ROS.
-      //   var ros = new ROSLIB.Ros({
-      //     url : 'ws://softshell.cs.washington.edu:9090'
-      //   });
-
-      //   // Initialize the teleop.
-      //   var teleop = new KEYBOARDTELEOP.Teleop({
-      //     ros : ros,
-      //     topic : '/base_controller/command'
-      //   });
-
-      //   // Create a UI slider using JQuery UI.
-      //   $('#speed-slider').slider({
-      //     range : 'min',
-      //     min : 0,
-      //     max : 100,
-      //     value : 90,
-      //     slide : function(event, ui) {
-      //       // Change the speed label.
-      //       $('#speed-label').html('Speed: ' + ui.value + '%');
-      //       // Scale the speed.
-      //       teleop.scale = (ui.value / 100.0);
-      //     }
-      //   });
-
-      //   // Set the initial speed .
-      //   $('#speed-label').html('Speed: ' + ($('#speed-slider').slider('value')) + '%');
-      //   teleop.scale = ($('#speed-slider').slider('value') / 100.0);
-      }
-
-      // ros.on('connection', function() {
-      //     console.log('Connected to websocket server.');
-      // });
-
-      // ros.on('error', function(error) {
-      //     console.log('Error connecting to websocket server: ', error);
-      // });
-
-      // ros.on('close', function() {
-      //     console.log('Connection to websocket server closed.');
-      // });
-
-      // var listener = new ROSLIB.Topic({
-      //     ros : ros,
-      //     name : '/voice_handler/voice_actions',
-      //     messageType : 'std_msgs/String'
-      // });
-
-      // listener.subscribe(function(message) {
-      //     console.log('Received message on ' + listener.name + ': ' + message.data);
-      //     alert("hello");
-      //     listener.unsubscribe();
-      // });
-
-      // ros.getParams(function(params) {
-      //     console.log(params);
-      // });
-
-    </script>
   </head>
 
-  <body onload="init()">
+  <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -268,3 +159,5 @@
     <script src="js/command.js"></script>
   </body>
 </html>
+
+
