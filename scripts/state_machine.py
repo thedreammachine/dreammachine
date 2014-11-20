@@ -27,6 +27,7 @@ from std_srvs.srv import *
 from geometry_msgs.msg import Twist, Vector3
 from std_msgs.msg import String
 from dream_machine.msg import MusicCommand
+from kobuki_msgs.msg import BumperEvent
 
 class States:
     START = 'start'
@@ -65,12 +66,22 @@ class Fiesta(EmptyState):
         self.max_angular_speed = 1.0
         self.initial_countdown = 30
 
+        self.bumper_hit = False
         self.countdown = 0
+
+        rospy.Subscriber("/mobile_base/events/bumper", BumperEvent, self.bumper_callback)
 
     def state(self):
         return States.FIESTA
 
     def execute(self):
+        if self.bumper_hit:
+            # move backwards
+            self.twist_message = Twist(Vector3(-self.forward_speed, 0.0, 0.0),
+                Vector3(0.0, 0.0, 0.0))
+            self.countdown = self.initial_countdown
+            self.bumper_hit = False
+
         if self.countdown == 0:
             self.twist_message = self.twist_factory()
             self.countdown = self.initial_countdown
@@ -81,16 +92,20 @@ class Fiesta(EmptyState):
 
         return None
 
-    def twist_factory(self):
-        angular_speed = (random() * 2 - 1) * self.max_angular_speed
-        velocity_msg = Twist(Vector3(self.forward_speed, 0.0, 0.0), Vector3(0.0, 0.0, angular_speed))
-        return velocity_msg
-
     def take_action(self, action):
         if action == Actions.END_FIESTA:
             return States.START
         else:
             return None
+
+    def twist_factory(self):
+        angular_speed = (random() * 2 - 1) * self.max_angular_speed
+        velocity_msg = Twist(Vector3(self.forward_speed, 0.0, 0.0), Vector3(0.0, 0.0, angular_speed))
+        return velocity_msg
+
+    def bumper_callback(self, bumper_event):
+        if bumper_event.state == 1:
+            self.bumper_hit = True
 
 class Start(EmptyState):
     def state(self):
