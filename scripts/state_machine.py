@@ -24,15 +24,16 @@ from random import random
 from corpus_builder import CorpusBuilder
 from voice_constants import *
 from std_srvs.srv import *
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, Vector3
 from std_msgs.msg import String
 from dream_machine.msg import MusicCommand
 
 class Fiesta:
     def __init__(self, pub):
         self.pub = pub
-        self.forward_speed = 0.2
-        self.max_angular_speed = 0.1
+        self.forward_speed = 0.1
+        self.max_angular_speed = 1.0
+        self.initial_countdown = 30
 
         self.countdown = 0
 
@@ -41,8 +42,8 @@ class Fiesta:
 
     def execute(self):
         if self.countdown == 0:
-            self.twist_message = twist_factory()
-            self.countdown = 10
+            self.twist_message = self.twist_factory()
+            self.countdown = self.initial_countdown
 
         self.pub.publish(self.twist_message)
 
@@ -54,9 +55,8 @@ class Fiesta:
         pass
 
     def twist_factory(self):
-        angular_speed = (random() * 2 - 1) * self.angular_speed
-        fiesta_msg = twist_factory(self.forward_speed, angular_speed)
-        velocity_msg = Twist(Vector3(forward_speed, 0.0, 0.0), Vector3(0.0, 0.0, angular_speed))
+        angular_speed = (random() * 2 - 1) * self.max_angular_speed
+        velocity_msg = Twist(Vector3(self.forward_speed, 0.0, 0.0), Vector3(0.0, 0.0, angular_speed))
         return velocity_msg
 
 class StateMachine:
@@ -66,10 +66,10 @@ class StateMachine:
 
     def __init__(self):
         # TODO change back to START
-        self.state = state_factory(StateMachine.FIESTA)
-
         self.pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
         self.r = rospy.Rate(10.0)
+
+        self.state = self.state_factory(StateMachine.FIESTA)
 
     def state_factory(self, state):
         if state == StateMachine.START:
@@ -82,7 +82,7 @@ class StateMachine:
     def run(self):
         while not rospy.is_shutdown():
             self.loop()
-            r.sleep()
+            self.r.sleep()
 
     def loop(self):
         new_state = self.state.execute()
@@ -216,7 +216,4 @@ class VoiceHandler:
 
 if __name__=="__main__":
     rospy.init_node('state_machine')
-    try:
-        StateMachine().run()
-    except:
-        pass
+    StateMachine().run()
