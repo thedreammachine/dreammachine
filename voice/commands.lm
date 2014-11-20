@@ -1,4 +1,4 @@
-Language model created by QuickLM on Mon Nov 10 15:25:19 EST 2014
+Language model created by QuickLM on Thu Nov 20 17:53:40 EST 2014
 Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
 
 The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
@@ -7,63 +7,52 @@ The code that was used to produce this language model is available in Open Sourc
 Please visit http://www.speech.cs.cmu.edu/tools/ for more information
 
 The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
-This model based on a corpus of 20 sentences and 24 words
+This model based on a corpus of 16 sentences and 20 words
 
 \data\
-ngram 1=24
-ngram 2=42
-ngram 3=31
+ngram 1=20
+ngram 2=34
+ngram 3=27
 
 \1-grams:
--0.8513 </s> -0.3010
--0.8513 <s> -0.2351
--2.1523 BABY -0.2351
--2.1523 BACK -0.2351
--2.1523 BEAUTIFUL -0.2351
--2.1523 CIRRUS -0.2351
--2.1523 DOWN -0.2351
--2.1523 ENERGY -0.2351
--2.1523 FORWARD -0.2351
--2.1523 FULL -0.2949
--2.1523 HALF -0.2949
--2.1523 HALT -0.2351
--2.1523 LEFT -0.2351
--2.1523 NEVER -0.2351
--2.1523 PAUSE -0.2351
--1.2492 PLAY -0.2094
--2.1523 RECURRING -0.2351
--2.1523 RIGHT -0.2351
--2.1523 SILVER -0.2351
--1.8513 SPEED -0.2351
--2.1523 STOP -0.2351
--2.1523 UNPAUSE -0.2351
--2.1523 UP -0.2351
--1.8513 VOLUME -0.2949
+-0.8678 </s> -0.3010
+-0.8678 <s> -0.2377
+-2.0719 BABY -0.2377
+-2.0719 BEAUTIFUL -0.2377
+-2.0719 BEGIN -0.2936
+-2.0719 CIRRUS -0.2377
+-2.0719 DOWN -0.2377
+-2.0719 END -0.2936
+-2.0719 ENERGY -0.2377
+-1.7709 FIESTA -0.2377
+-2.0719 NEVER -0.2377
+-2.0719 PAUSE -0.2377
+-1.1688 PLAY -0.2069
+-2.0719 RECURRING -0.2377
+-2.0719 RESET -0.2377
+-2.0719 SILVER -0.2377
+-2.0719 STOP -0.2377
+-2.0719 UNPAUSE -0.2377
+-2.0719 UP -0.2377
+-1.7709 VOLUME -0.2936
 
 \2-grams:
--1.6021 <s> BACK 0.0000
--1.6021 <s> FORWARD 0.0000
--1.6021 <s> FULL 0.0000
--1.6021 <s> HALF 0.0000
--1.6021 <s> HALT 0.0000
--1.6021 <s> LEFT 0.0000
--1.6021 <s> PAUSE 0.0000
--0.6990 <s> PLAY 0.0000
--1.6021 <s> RIGHT 0.0000
--1.6021 <s> STOP 0.0000
--1.6021 <s> UNPAUSE 0.0000
--1.3010 <s> VOLUME 0.0000
+-1.5051 <s> BEGIN 0.0000
+-1.5051 <s> END 0.0000
+-1.5051 <s> PAUSE 0.0000
+-0.6021 <s> PLAY 0.0000
+-1.5051 <s> RESET 0.0000
+-1.5051 <s> STOP 0.0000
+-1.5051 <s> UNPAUSE 0.0000
+-1.2041 <s> VOLUME 0.0000
 -0.3010 BABY </s> -0.3010
--0.3010 BACK </s> -0.3010
 -0.3010 BEAUTIFUL </s> -0.3010
+-0.3010 BEGIN FIESTA 0.0000
 -0.3010 CIRRUS </s> -0.3010
 -0.3010 DOWN </s> -0.3010
+-0.3010 END FIESTA 0.0000
 -0.3010 ENERGY </s> -0.3010
--0.3010 FORWARD </s> -0.3010
--0.3010 FULL SPEED 0.0000
--0.3010 HALF SPEED 0.0000
--0.3010 HALT </s> -0.3010
--0.3010 LEFT </s> -0.3010
+-0.3010 FIESTA </s> -0.3010
 -0.3010 NEVER </s> -0.3010
 -0.3010 PAUSE </s> -0.3010
 -1.2041 PLAY </s> -0.3010
@@ -75,9 +64,8 @@ ngram 3=31
 -1.2041 PLAY RECURRING 0.0000
 -1.2041 PLAY SILVER 0.0000
 -0.3010 RECURRING </s> -0.3010
--0.3010 RIGHT </s> -0.3010
+-0.3010 RESET </s> -0.3010
 -0.3010 SILVER </s> -0.3010
--0.3010 SPEED </s> -0.3010
 -0.3010 STOP </s> -0.3010
 -0.3010 UNPAUSE </s> -0.3010
 -0.3010 UP </s> -0.3010
@@ -85,12 +73,8 @@ ngram 3=31
 -0.6021 VOLUME UP 0.0000
 
 \3-grams:
--0.3010 <s> BACK </s>
--0.3010 <s> FORWARD </s>
--0.3010 <s> FULL SPEED
--0.3010 <s> HALF SPEED
--0.3010 <s> HALT </s>
--0.3010 <s> LEFT </s>
+-0.3010 <s> BEGIN FIESTA
+-0.3010 <s> END FIESTA
 -0.3010 <s> PAUSE </s>
 -1.2041 <s> PLAY </s>
 -1.2041 <s> PLAY BABY
@@ -100,13 +84,13 @@ ngram 3=31
 -1.2041 <s> PLAY NEVER
 -1.2041 <s> PLAY RECURRING
 -1.2041 <s> PLAY SILVER
--0.3010 <s> RIGHT </s>
+-0.3010 <s> RESET </s>
 -0.3010 <s> STOP </s>
 -0.3010 <s> UNPAUSE </s>
 -0.6021 <s> VOLUME DOWN
 -0.6021 <s> VOLUME UP
--0.3010 FULL SPEED </s>
--0.3010 HALF SPEED </s>
+-0.3010 BEGIN FIESTA </s>
+-0.3010 END FIESTA </s>
 -0.3010 PLAY BABY </s>
 -0.3010 PLAY BEAUTIFUL </s>
 -0.3010 PLAY CIRRUS </s>

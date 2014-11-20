@@ -22,11 +22,33 @@ import math
 from random import random
 
 from corpus_builder import CorpusBuilder
-from voice_constants import *
+import voice_constants
 from std_srvs.srv import *
 from geometry_msgs.msg import Twist, Vector3
 from std_msgs.msg import String
 from dream_machine.msg import MusicCommand
+
+class States:
+    START = 'start'
+    FIESTA = 'fiesta'
+    GO_HOME = 'go_home'
+    FOLLOW_TARGET = 'follow_target'
+    SEARCH_TARGET = 'search_target'
+    ENTERTAIN = 'entertain'
+    GO_LOC = 'go_loc'
+
+class Actions:
+    BEGIN_FIESTA = 'begin_fiesta'
+    END_FIESTA = 'end_fiesta'
+    ARRIVED_START_LOC = 'arrived_start'
+    BEGIN_FOLLOW = 'begin_follow'
+    END_FOLLOW = 'end_follow'
+    TARGET_LOST = 'target_lost'
+    TARGET_LOCATED = 'target_located'
+    END_SONG = 'end_song'
+    ARRIVED_GOAL_LOC = 'arrived_goal'
+    BEGIN_LOC = 'begin_loc'
+    RESET = 'reset'
 
 class EmptyState:
     def execute(self):
@@ -79,28 +101,6 @@ class Start(EmptyState):
         else:
             return None
 
-class Actions:
-    BEGIN_FIESTA = 'begin_fiesta'
-    END_FIESTA = 'end_fiesta'
-    ARRIVED_START_LOC = 'arrived_start'
-    BEGIN_FOLLOW = 'begin_follow'
-    END_FOLLOW = 'end_follow'
-    TARGET_LOST = 'target_lost'
-    TARGET_LOCATED = 'target_located'
-    END_SONG = 'end_song'
-    ARRIVED_GOAL_LOC = 'arrived_goal'
-    BEGIN_LOC = 'begin_loc'
-
-
-class States:
-    START = 'start'
-    FIESTA = 'fiesta'
-    GO_HOME = 'go_home'
-    FOLLOW_TARGET = 'follow_target'
-    SEARCH_TARGET = 'search_target'
-    ENTERTAIN = 'entertain'
-    GO_LOC = 'go_loc'
-
 class StateMachine:
     def __init__(self):
         # TODO change back to START
@@ -134,7 +134,10 @@ class StateMachine:
             self.state = self.state_factory(new_state)
 
     def take_action(self, action):
-        if action:
+        if action == Actions.RESET:
+            # special case, go directly to start state.
+            self.change_state(States.START)
+        elif action:
             self.change_state(self.state.take_action(action))
 
 class VoiceHandler:
@@ -166,9 +169,11 @@ class VoiceHandler:
         if self.started:
 
             print msg.data
-            if msg.data.find("halt") > -1:
+            if voice_constants.RESET in msg.data:
+                self.state_machine.take_action(Actions.RESET)
+            elif voice_constants.END_FIESTA in msg.data:
                 self.state_machine.take_action(Actions.END_FIESTA)
-            if msg.data.find("fiesta") > -1:
+            elif voice_constants.BEGIN_FIESTA in msg.data:
                 self.state_machine.take_action(Actions.BEGIN_FIESTA)
 
             #Music Commands
@@ -178,24 +183,24 @@ class VoiceHandler:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
                 self.voice_actions_pub.publish(msg.data)
 
-            elif msg.data.find("play") > -1:
+            elif voice_constants.PLAY in msg.data:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
-                self.voice_actions_pub.publish(VOICE_PLAY)
-            elif msg.data.find("stop") > -1:
+                self.voice_actions_pub.publish(voice_constants.PLAY)
+            elif voice_constants.STOP in msg.data:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.STOP, []))
-                self.voice_actions_pub.publish(VOICE_STOP)
-            elif msg.data.find("unpause") > -1:
+                self.voice_actions_pub.publish(voice_constants.STOP)
+            elif voice_constants.UNPAUSE in msg.data:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.UNPAUSE, []))
-                self.voice_actions_pub.publish(VOICE_UNPAUSE)
-            elif msg.data.find("pause") > -1:
+                self.voice_actions_pub.publish(voice_constants.UNPAUSE)
+            elif voice_constants.PAUSE in msg.data:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.PAUSE, []))
-                self.voice_actions_pub.publish(VOICE_PAUSE)
-            elif msg.data.find("volume up") > -1:
+                self.voice_actions_pub.publish(voice_constants.PAUSE)
+            elif voice_constants.VOLUME_UP in msg.data:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.VOLUME_UP, []))
-                self.voice_actions_pub.publish(VOICE_VOLUME_UP)
-            elif msg.data.find("volume down") > -1:
+                self.voice_actions_pub.publish(voice_constants.VOLUME_UP)
+            elif voice_constants.VOLUME_DOWN in msg.data:
                 self.music_commands_pub.publish(MusicCommand(MusicCommand.VOLUME_DOWN, []))
-                self.voice_actions_pub.publish(VOICE_VOLUME_DOWN)
+                self.voice_actions_pub.publish(voice_constants.VOLUME_DOWN)
 
     def start(self, req):
         self.started = True

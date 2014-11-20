@@ -1,21 +1,16 @@
-forward
-left
-right
-back
-backward
-move forward
-move right
-move left
-move back
-move backward
-halt
-half speed
-full speed
-play
-stop
+begin fiesta
+end fiesta
 pause
+play
+reset
+stop
 unpause
-volume up
 volume down
-
-
+volume up
+play energy
+play cirrus
+play beautiful
+play baby
+play recurring
+play silver
+play never

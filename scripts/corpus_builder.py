@@ -8,6 +8,11 @@ SCRIPT_DIR = os.path.dirname(__file__)
 
 MUSIC_ROOT = os.environ['HOME'] + '/dream_machine_music'
 
+# Take the output of this script and upload it to:
+# http://www.speech.cs.cmu.edu/tools/lmtool-new.html
+#
+# to generate the other files needed for speech recognition
+
 class CorpusBuilder:
 
   def build_corpus(self):
