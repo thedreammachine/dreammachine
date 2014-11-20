@@ -135,7 +135,7 @@ class StateMachine:
 
     def take_action(self, action):
         if action:
-            change_state(self.state.take_action(action))
+            self.change_state(self.state.take_action(action))
 
 class VoiceHandler:
 
@@ -158,7 +158,7 @@ class VoiceHandler:
         self.music_corpus = CorpusBuilder().read_song_directory()
         print 'done initializing vh'
 
-    def speech_callback(self, msg, a):
+    def speech_callback(self, msg):
         print 'sc'
         rospy.loginfo(msg.data)
 
@@ -167,9 +167,9 @@ class VoiceHandler:
 
             print msg.data
             if msg.data.find("halt") > -1:
-                state_machine.take_action(Actions.END_FIESTA)
+                self.state_machine.take_action(Actions.END_FIESTA)
             if msg.data.find("fiesta") > -1:
-                state_machine.take_action(Actions.BEGIN_FIESTA)
+                self.state_machine.take_action(Actions.BEGIN_FIESTA)
 
             #Music Commands
             if msg.data in self.music_corpus:
