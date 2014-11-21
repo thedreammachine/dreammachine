@@ -10,7 +10,7 @@ songDictionary["beautiful"] = "Uppermost - Beautiful Light.wav";
 songDictionary["energy"] = "Uppermost - Energy.wav";
 
 // TAB
-$('#myTab a').click(function (e) {
+$('#command-tabs a').click(function (e) {
   e.preventDefault()
   if($(this).attr('href') == "#voice-tab") {
     var params = {type:"flip_voice_handler", turn:"on"};
@@ -141,4 +141,17 @@ listener.subscribe(function(message) {
 
 console.log(listener);
 
+// ROS2D (map)
 
+var viewer = new ROS2D.Viewer({
+    divID : 'map_nav',
+    width : 750,
+    height : 800
+});
+
+nav = new NAV2D.OccupancyGridClientNav({
+    ros : ros,
+    rootObject : viewer.scene,
+    viewer : viewer,
+    serverName : '/move_base'
+});

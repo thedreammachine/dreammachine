@@ -16,7 +16,6 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/starter-template.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
@@ -24,22 +23,28 @@
     <!-- My Own gui.css: -->
     <link href="css/gui.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
-    <!-- image viewer -->
+    <!-- local JS files -->
+    <script src="js/kinetic-v4.7.2.min.js"></script>
+    <script src="js/command.js"></script>
+
+    <!-- required scripts -->
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/EaselJS/current/easeljs.min.js"></script>
     <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
     <script type="text/javascript" src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.min.js"></script>
-
-    <!-- teleop -->
     <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
     <script type="text/javascript" src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/ros2djs/current/ros2d.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/nav2djs/current/nav2d.min.js"></script>
   </head>
 
   <body>
+    <!-- navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -61,102 +66,107 @@
       </div>
     </nav>
 
+    <!-- entire body for the web gui -->
     <div class="container">
-      <div class="starter-template">
-        <!-- For the ROS image viewer: -->
-        <div id="image-div">
-          <h1>Camera</h1>
-          <div id="mjpeg"></div>
-          <img src="http://localhost:8080/stream?topic=/camera/rgb/image_raw" alt="Camera Not Available (Only works on the localhost.)" style="width:560px;height:420px"/>
-          <!-- 640/480 -->
+
+      <!-- viewer tabs -->
+      <div id="image-div">
+
+        <ul class="nav nav-tabs" role="tablist" id="viewer-tabs">
+          <li role="presentation" class="active"><a href="#camera-tab" role="tab" data-toggle="tab">Camera</a></li>
+          <li role="presentation"><a href="#map-tab" role="tab" data-toggle="tab">Map</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- camera tab -->
+          <div role="tabpanel" class="tab-pane active" id="camera-tab">
+            <h1>Camera</h1>
+            <img src="http://localhost:8080/stream?topic=/camera/rgb/image_raw" alt="(Camera not loaded...)" style="width:560px;height:420px"/> <!-- 640/480 -->
+          </div>
+
+          <!-- map tab -->
+          <div role="tabpanel" class="tab-pane" id="map-tab">
+            <h1>Map</h1>
+            <div id="map_nav"></div>
+          </div>
         </div>
       </div>
 
-      <div class="starter-template">
-        <div id="command-div">
+      <!-- command tabs -->
+      <div id="command-div">
 
-          <ul class="nav nav-tabs" role="tablist" id="myTab">
-            <li role="presentation" class="active"><a href="#movement-tab" role="tab" data-toggle="tab">Movement</a></li>
-            <li role="presentation"><a href="#voice-tab" role="tab" data-toggle="tab">Voice</a></li>
-          </ul>
+        <ul class="nav nav-tabs" role="tablist" id="command-tabs">
+          <li role="presentation" class="active"><a href="#movement-tab" role="tab" data-toggle="tab">Movement</a></li>
+          <li role="presentation"><a href="#voice-tab" role="tab" data-toggle="tab">Voice</a></li>
+        </ul>
 
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="movement-tab">
-              <h1>Command</h1>
-              <div id="speed-label"></div>
-              <div id="speed-slider"></div>
-              <div id="arrow-commands">
-                <table>
-                  <tr>
-                    <td></td>
-                    <!-- forward -->
-                    <td><button class="btn btn-primary" id="forward-command" ><span class="glyphicon glyphicon-arrow-up"></span></button></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <!-- left -->
-                    <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, 0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
-                    <td></td>
-                    <!-- right -->
-                    <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, -0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-right"></span></button></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <!-- backward -->
-                    <td><button class="btn btn-primary" onmousedown="base_command_start(-0.1, 0, 0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-down"></span></button></td>
-                    <td></td>
-                  </tr>
-                </table>
-              </div>
+        <!-- arrow commands -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="movement-tab">
+            <h1>Command</h1>
+            <div id="arrow-commands">
+              <table>
+                <tr>
+                  <td></td>
+                  <!-- forward -->
+                  <td><button class="btn btn-primary" id="forward-command" ><span class="glyphicon glyphicon-arrow-up"></span></button></td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <!-- left -->
+                  <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, 0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                  <td></td>
+                  <!-- right -->
+                  <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, -0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-right"></span></button></td>
+                </tr>
+
+                <tr>
+                  <td></td>
+                  <!-- backward -->
+                  <td><button class="btn btn-primary" onmousedown="base_command_start(-0.1, 0, 0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-down"></span></button></td>
+                  <td></td>
+                </tr>
+              </table>
             </div>
+          </div>
 
-            <div role="tabpanel" class="tab-pane" id="voice-tab">
-              <div id="previous-commands">
-                <h3>Previous Commands</h3>
-                  <ol id="command-list" class="list-group"></ol>
-              </div>
+          <!-- voice commands -->
+          <div role="tabpanel" class="tab-pane" id="voice-tab">
+            <div id="previous-commands">
+              <h3>Previous Commands</h3>
+                <ol id="command-list" class="list-group"></ol>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="starter-template">
-        <div id="music-div">
-          <h3>
-            <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                Music
-                <span class="caret"></span>
-              </button>
-              <ul id="music-dropdown" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                <li id="cirrus" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Cirrus.wav</a></li>
-                <li id="recurring" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Recurring.wav</a></li>
-                <li id="silver" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Silver.wav</a></li>
-                <li id="never" role="presentation"><a role="menuitem" tabindex="-1" href="#">Rick Astley - Never Gonna Give You Up.wav</a></li>
-                <li id="baby" role="presentation"><a role="menuitem" tabindex="-1" href="#">Sir MixALot - Baby Got Back.wav</a></li>
-                <li id="beautiful" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Beautiful Light.wav</a></li>
-                <li id="energy" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Energy.wav</a></li>
-              </ul>
+      <!-- music player div -->
+      <div id="music-div">
+        <h3>
+          <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+              Music
+              <span class="caret"></span>
+            </button>
 
-              <button id="play-music" class="btn btn-primary"><span class="glyphicon glyphicon-play"></span></button>
-              <button id="stop-music" class="btn btn-primary"><span class="glyphicon glyphicon-stop"></span></button>
-            </div>
-          </h3>
-        </div>
+            <ul id="music-dropdown" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+              <li id="cirrus" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Cirrus.wav</a></li>
+              <li id="recurring" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Recurring.wav</a></li>
+              <li id="silver" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Silver.wav</a></li>
+              <li id="never" role="presentation"><a role="menuitem" tabindex="-1" href="#">Rick Astley - Never Gonna Give You Up.wav</a></li>
+              <li id="baby" role="presentation"><a role="menuitem" tabindex="-1" href="#">Sir MixALot - Baby Got Back.wav</a></li>
+              <li id="beautiful" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Beautiful Light.wav</a></li>
+              <li id="energy" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Energy.wav</a></li>
+            </ul>
+
+            <button id="play-music" class="btn btn-primary"><span class="glyphicon glyphicon-play"></span></button>
+            <button id="stop-music" class="btn btn-primary"><span class="glyphicon glyphicon-stop"></span></button>
+          </div>
+        </h3>
       </div>
 
     </div><!-- /.container -->
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <!-- <script src="js/ie10-viewport-bug-workaround.js"></script> -->
-    <script src="js/kinetic-v4.7.2.min.js"></script>
-    <script src="js/command.js"></script>
   </body>
 </html>
 
