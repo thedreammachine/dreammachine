@@ -118,12 +118,11 @@ class Start(EmptyState):
 
 class StateMachine:
     def __init__(self):
-        # TODO change back to START
         print 'start init state_machine'
         self.pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
         self.r = rospy.Rate(10.0)
 
-        self.state = self.state_factory(States.FIESTA)
+        self.state = self.state_factory(States.START)
         print 'end init state_machine'
 
     def state_factory(self, state):
@@ -170,8 +169,7 @@ class VoiceHandler:
         rospy.Service("~stop", Empty, self.stop)
 
         #Disable self on bootup
-        # TODO change back
-        self.started = True
+        self.started = False
 
         self.music_corpus = CorpusBuilder().read_song_directory()
         print 'done initializing vh'
@@ -186,10 +184,13 @@ class VoiceHandler:
             print msg.data
             if voice_constants.RESET in msg.data:
                 self.state_machine.take_action(Actions.RESET)
+                self.voice_actions_pub.publish(Actions.RESET)
             elif voice_constants.END_FIESTA in msg.data:
                 self.state_machine.take_action(Actions.END_FIESTA)
+                self.voice_actions_pub.publish(Actions.END_FIESTA)
             elif voice_constants.BEGIN_FIESTA in msg.data:
                 self.state_machine.take_action(Actions.BEGIN_FIESTA)
+                self.voice_actions_pub.publish(Actions.BEGIN_FIESTA)
 
             #Music Commands
             if msg.data in self.music_corpus:

@@ -9,8 +9,16 @@
     <link rel="icon" href="favicon.ico">
 
     <title>The Dream Machine Web GUI</title>
-    <!-- usuage: 1) launch the turtlebot (minimal & 3d-sensor) 2) launch the gui 3) http://localhost:31337/ -->
-    <!-- also need to run robot.launch and rosbridge on the turtlebot itself -->
+    <!-- 
+      usuage instructions:
+        1) ssh & launch from turtlebot (minimal & 3d-sensor)
+        2) roslaunch dream_machine robot.launch (on turtlebot)
+        3) rosrun robot_pose_publisher robot_pose_publisher (on turtlebot - for the map)
+        4) roslaunch turtlebot_navigation amcl_demo.launch map_file:=/home/turtlebot/maps/003d.map.yaml (on turtlebot - for the map)
+        5) roslaunch rosbridge_server rosbridge_websocket.launch (on turtlebot)
+        6) launch the gui (setrobot softshell)
+        7) http://localhost:31337
+    -->
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -20,8 +28,20 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 
+    <!-- bootstrap music player CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- <link href="https://raw.githubusercontent.com/duanewilson/bootstrap-player/master/css/bootstrap-player.css" rel="stylesheet"> -->
+
     <!-- My Own gui.css: -->
     <link href="css/gui.css" rel="stylesheet">
+
+    <!-- required scripts -->
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/EaselJS/current/easeljs.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/ros2djs/current/ros2d.min.js"></script>
+    <script type="text/javascript" src="http://cdn.robotwebtools.org/nav2djs/current/nav2d.min.js"></script> 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -29,18 +49,15 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
+    <!-- bootstrap music player JS -->
+    <!-- 
+    <script src="https://raw.githubusercontent.com/fryn/html5slider/gh-pages/html5slider.js"></script>
+    <script src="https://raw.githubusercontent.com/duanewilson/bootstrap-player/master/js/bootstrap-player.js"></script>
+    -->
+
     <!-- local JS files -->
     <script src="js/kinetic-v4.7.2.min.js"></script>
     <script src="js/command.js"></script>
-
-    <!-- required scripts -->
-    <script type="text/javascript" src="http://cdn.robotwebtools.org/EaselJS/current/easeljs.min.js"></script>
-    <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
-    <script type="text/javascript" src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.min.js"></script>
-    <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
-    <script type="text/javascript" src="http://cdn.robotwebtools.org/keyboardteleopjs/current/keyboardteleop.min.js"></script>
-    <script type="text/javascript" src="http://cdn.robotwebtools.org/ros2djs/current/ros2d.min.js"></script>
-    <script type="text/javascript" src="http://cdn.robotwebtools.org/nav2djs/current/nav2d.min.js"></script>
   </head>
 
   <body>
@@ -115,16 +132,16 @@
 
                 <tr>
                   <!-- left -->
-                  <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, 0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                  <td><button class="btn btn-primary" id="left-command"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
                   <td></td>
                   <!-- right -->
-                  <td><button class="btn btn-primary" onmousedown="base_command_start(0, 0, -0.5)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-right"></span></button></td>
+                  <td><button class="btn btn-primary" id="right-command"><span class="glyphicon glyphicon-arrow-right"></span></button></td>
                 </tr>
 
                 <tr>
                   <td></td>
                   <!-- backward -->
-                  <td><button class="btn btn-primary" onmousedown="base_command_start(-0.1, 0, 0)" onmouseup="base_command_end()"><span class="glyphicon glyphicon-arrow-down"></span></button></td>
+                  <td><button class="btn btn-primary" id="backward-command"><span class="glyphicon glyphicon-arrow-down"></span></button></td>
                   <td></td>
                 </tr>
               </table>
@@ -162,11 +179,37 @@
 
             <button id="play-music" class="btn btn-primary"><span class="glyphicon glyphicon-play"></span></button>
             <button id="stop-music" class="btn btn-primary"><span class="glyphicon glyphicon-stop"></span></button>
+
+
           </div>
         </h3>
       </div>
 
     </div><!-- /.container -->
+
+    <!-- bootstrap music player -->
+    <!-- <div class="container">
+    <div class="row">
+    <h1>Minimalist Player</h1>
+    <p class="lead">Just the bits you want, IMHO</p>
+    <hr>
+    <br>
+    <div id="demo" class="row-audio clearfix center-block text-center">
+    <audio controls>
+    <source src="https://archive.org/download/Twiddle2014-09-25/Twiddle2014-9-25Track10.ogg" type="audio/ogg" />
+    <source src="https://ia801404.us.archive.org/22/items/Twiddle2014-09-25/Twiddle2014-9-25Track10.mp3" type="audio/mpeg" />
+    <a href="https://ia801404.us.archive.org/22/items/Twiddle2014-09-25/Twiddle2014-9-25Track10.mp3">La Bamba</a>
+    </audio>
+    </div>
+    <br>
+    <hr>
+    <p>
+    <small class="text-muted">La Bamba by Twiddle : Live at Vermont Technical College on 2014-09-25 (September 25, 2014)</small>
+    </p>
+    </div>
+    </div>
+    -->
+
   </body>
 </html>
 

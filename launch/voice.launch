@@ -3,4 +3,6 @@
     <param name="lm" value="$(find dream_machine)/voice/commands.lm"/>
     <param name="dict" value="$(find dream_machine)/voice/commands.dic"/>
   </node>
+
+  <node name="web_server" type="web_server.py" pkg="dream_machine"/>
 </launch>

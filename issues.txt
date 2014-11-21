@@ -1,0 +1,16 @@
+bugs:
+	(map):
+	[ERROR] [1416612020.932575474]: Failed to find nodelet with name '/depthimage_to_laserscan' to unload.
+    [ WARN] [1416612022.218209889]: Waiting on transform from base_footprint to map to become available before running costmap, tf error:
+
+features:
+	map & location mode (in progress)
+	follow mode
+	lights
+
+enhancements:
+	music player
+		- "Refused to execute script from 'https://raw.githubusercontent.com/duanewilson/bootstrap-player/master/js/bootstrap-player.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled."
+		- seems like using the js directly is not working properly
+
+
