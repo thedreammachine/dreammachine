@@ -60,8 +60,9 @@ class EmptyState:
         return None
 
 class Fiesta(EmptyState):
-    def __init__(self, pub):
-        self.pub = pub
+    def __init__(self, mobile_base_pub, music_commands_pub):
+        self.mobile_base_pub = mobile_base_pub
+        self.music_commands_pub = music_commands_pub
         self.forward_speed = 0.1
         self.max_angular_speed = 1.0
         self.initial_countdown = 30
@@ -70,6 +71,9 @@ class Fiesta(EmptyState):
         self.countdown = 0
 
         rospy.Subscriber("/mobile_base/events/bumper", BumperEvent, self.bumper_callback)
+
+        self.music_commands_pub.publish(MusicCommand(MusicCommand.LOAD, ["Flux Pavilion - I Cant Stop.wav"]))
+        self.music_commands_pub.publish(MusicCommand(MusicCommand.PLAY, []))
 
     def state(self):
         return States.FIESTA
@@ -86,7 +90,7 @@ class Fiesta(EmptyState):
             self.twist_message = self.twist_factory()
             self.countdown = self.initial_countdown
 
-        self.pub.publish(self.twist_message)
+        self.mobile_base_pub.publish(self.twist_message)
 
         self.countdown -= 1
 
@@ -119,7 +123,8 @@ class Start(EmptyState):
 class StateMachine:
     def __init__(self):
         print 'start init state_machine'
-        self.pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
+        self.mobile_base_pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
+        self.music_commands_pub = rospy.Publisher('music_commands', MusicCommand)
         self.r = rospy.Rate(10.0)
 
         self.state = self.state_factory(States.START)
@@ -129,7 +134,7 @@ class StateMachine:
         if state == States.START:
             return Start()
         elif state == States.FIESTA:
-            return Fiesta(self.pub)
+            return Fiesta(self.mobile_base_pub, self.music_commands_pub)
         elif state == States.GO_HOME:
             return None
 
