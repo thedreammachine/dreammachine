@@ -16,8 +16,10 @@
         3) rosrun robot_pose_publisher robot_pose_publisher (on turtlebot - for the map)
         4) roslaunch turtlebot_navigation amcl_demo.launch map_file:=/home/turtlebot/maps/003d.map.yaml (on turtlebot - for the map)
         5) roslaunch rosbridge_server rosbridge_websocket.launch (on turtlebot)
-        6) launch the gui (setrobot softshell)
+        6) "setrobot softshell" -> launch the gui (setrobot softshell)
         7) http://localhost:31337
+
+        * REMEMBER TO "SETROBOT SOFTSHELL" BEFORE GUI!!!
     -->
 
     <!-- Bootstrap core CSS -->
@@ -30,10 +32,11 @@
 
     <!-- bootstrap music player CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- <link href="https://raw.githubusercontent.com/duanewilson/bootstrap-player/master/css/bootstrap-player.css" rel="stylesheet"> -->
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
 
     <!-- My Own gui.css: -->
     <link href="css/gui.css" rel="stylesheet">
+    <link href="css/bootstrap-player.css" rel="stylesheet">
 
     <!-- required scripts -->
     <script type="text/javascript" src="http://cdn.robotwebtools.org/EaselJS/current/easeljs.min.js"></script>
@@ -49,15 +52,13 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
-    <!-- bootstrap music player JS -->
-    <!-- 
-    <script src="https://raw.githubusercontent.com/fryn/html5slider/gh-pages/html5slider.js"></script>
-    <script src="https://raw.githubusercontent.com/duanewilson/bootstrap-player/master/js/bootstrap-player.js"></script>
-    -->
-
     <!-- local JS files -->
     <script src="js/kinetic-v4.7.2.min.js"></script>
     <script src="js/command.js"></script>
+
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+    <link href="css/bootstrap-player.css" rel="stylesheet">
   </head>
 
   <body>
@@ -146,6 +147,30 @@
                 </tr>
               </table>
             </div>
+
+<!--             <h3>
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                  Music
+                  <span class="caret"></span>
+                </button>
+
+                <ul id="music-dropdown" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                  <li id="cirrus" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Cirrus.wav</a></li>
+                  <li id="recurring" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Recurring.wav</a></li>
+                  <li id="silver" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Silver.wav</a></li>
+                  <li id="never" role="presentation"><a role="menuitem" tabindex="-1" href="#">Rick Astley - Never Gonna Give You Up.wav</a></li>
+                  <li id="baby" role="presentation"><a role="menuitem" tabindex="-1" href="#">Sir MixALot - Baby Got Back.wav</a></li>
+                  <li id="beautiful" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Beautiful Light.wav</a></li>
+                  <li id="energy" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Energy.wav</a></li>
+                </ul>
+
+                <button id="play-music" class="btn btn-primary"><span class="glyphicon glyphicon-play"></span></button>
+                <button id="stop-music" class="btn btn-primary"><span class="glyphicon glyphicon-stop"></span></button>
+
+              </div>
+            </h3> -->
+
           </div>
 
           <!-- voice commands -->
@@ -160,55 +185,33 @@
 
       <!-- music player div -->
       <div id="music-div">
-        <h3>
-          <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-              Music
-              <span class="caret"></span>
-            </button>
-
-            <ul id="music-dropdown" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-              <li id="cirrus" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Cirrus.wav</a></li>
-              <li id="recurring" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Recurring.wav</a></li>
-              <li id="silver" role="presentation"><a role="menuitem" tabindex="-1" href="#">Bonobo - Silver.wav</a></li>
-              <li id="never" role="presentation"><a role="menuitem" tabindex="-1" href="#">Rick Astley - Never Gonna Give You Up.wav</a></li>
-              <li id="baby" role="presentation"><a role="menuitem" tabindex="-1" href="#">Sir MixALot - Baby Got Back.wav</a></li>
-              <li id="beautiful" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Beautiful Light.wav</a></li>
-              <li id="energy" role="presentation"><a role="menuitem" tabindex="-1" href="#">Uppermost - Energy.wav</a></li>
-            </ul>
-
-            <button id="play-music" class="btn btn-primary"><span class="glyphicon glyphicon-play"></span></button>
-            <button id="stop-music" class="btn btn-primary"><span class="glyphicon glyphicon-stop"></span></button>
-
-
+        <h1> Music Control </h1>
+        <div class="span5" id="bootstrap-player">
+          <div class="span5" id="useless1">
+            <div class="undefined well container-fluid playa">
+              <input id="searchMusic" class="span3" type="text" placeholder="Select Song" title="Choose song to load.">
+              <button class="btn btn-default load">Load Song</button>
+            </div>
           </div>
-        </h3>
-      </div>
+          <div id="player_control_container" class="span5">
+            <audio controls
+              data-info-title="Title_Placeholder"
+              data-info-artist="Artist_Placeholder"
+              <source src="http://www.lost-letters.com/wp-content/uploads/2013/02/cusb-cyl2985d.ogg" type="audio/ogg" />
+              <source src="http://www.lost-letters.com/wp-content/uploads/2013/02/cusb-cyl2985d.mp3" type="audio/mpeg" />
+              <a href="http://www.lost-letters.com/wp-content/uploads/2013/02/cusb-cyl2985d.mp3">cusb_cyl2985d</a>
+            </audio>
+          </div>
+        </div>
 
+      </div>
     </div><!-- /.container -->
 
-    <!-- bootstrap music player -->
-    <!-- <div class="container">
-    <div class="row">
-    <h1>Minimalist Player</h1>
-    <p class="lead">Just the bits you want, IMHO</p>
-    <hr>
-    <br>
-    <div id="demo" class="row-audio clearfix center-block text-center">
-    <audio controls>
-    <source src="https://archive.org/download/Twiddle2014-09-25/Twiddle2014-9-25Track10.ogg" type="audio/ogg" />
-    <source src="https://ia801404.us.archive.org/22/items/Twiddle2014-09-25/Twiddle2014-9-25Track10.mp3" type="audio/mpeg" />
-    <a href="https://ia801404.us.archive.org/22/items/Twiddle2014-09-25/Twiddle2014-9-25Track10.mp3">La Bamba</a>
-    </audio>
-    </div>
-    <br>
-    <hr>
-    <p>
-    <small class="text-muted">La Bamba by Twiddle : Live at Vermont Technical College on 2014-09-25 (September 25, 2014)</small>
-    </p>
-    </div>
-    </div>
-    -->
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+
+    <!-- bootstrap player -->
+    <script src="js/html5slider.js"></script>
+    <script src="js/bootstrap-player.js"></script>
 
   </body>
 </html>

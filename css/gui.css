@@ -20,7 +20,7 @@ body {
 
 #music-div {
   border: 5px solid #101010;
-  height: 100px;
+  height: 250px;
   clear: both;
 }
 
@@ -46,4 +46,13 @@ body {
 #music-dropdown {
   /*text-align: center;*/
   margin-left: 400px;
+}
+
+#bootstrap-player {
+  float: none;
+  margin: 0 auto;
+}
+
+#useless1, #player_control_container {
+  margin-left: 0px;
 }

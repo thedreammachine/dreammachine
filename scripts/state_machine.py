@@ -169,7 +169,7 @@ class VoiceHandler:
         rospy.Service("~stop", Empty, self.stop)
 
         #Disable self on bootup
-        self.started = False
+        self.started = True
 
         self.music_corpus = CorpusBuilder().read_song_directory()
         print 'done initializing vh'
