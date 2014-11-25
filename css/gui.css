@@ -3,29 +3,29 @@ body {
 }
 
 #image-div {
-  border: 5px solid #101010;
+  border: 3px solid #101010;
   width: 65%;
-  height: 570px;
+  height: 600px;
   float: left;
   margin-bottom: 20px;
 }
 
 #command-div {
-  border: 5px solid #101010;
+  border: 3px solid #101010;
   width: 30%;
-  height: 570px;
+  height: 600px;
   float: right;
   overflow: hidden;
 }
 
 #music-div {
-  border: 5px solid #101010;
+  border: 3px solid #101010;
   height: 250px;
   clear: both;
 }
 
 #previous-commands {
-  border: 5px solid #101010;
+  border: 3px solid #101010;
   height: 425px;
   margin: 20px;
   overflow: scroll;
