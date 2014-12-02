@@ -136,8 +136,10 @@ class SearchTarget(EmptyState):
 
     def cleanup(self):
         self.ar_pose_sub.unregister()
+
     def state(self):
-        return States.SearchTarget
+        return States.SEARCH_TARGET
+
     def ar_callback(self, message):
         if (len(message.markers) > 0):
             self.target_acquired = True
@@ -147,7 +149,7 @@ class SearchTarget(EmptyState):
             return States.FOLLOW_TARGET
         # TODO do some sort of interesting thing to move around and look for the
         # target
-        self.cmd_vel_pub.publish(Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.5)))
+        self.cmd_vel_pub.publish(Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.3)))
 
     def take_action(self, action):
         if action == END_FOLLOW:
@@ -171,7 +173,7 @@ class FollowTarget(EmptyState):
     def cleanup(self):
         self.ar_pose_sub.unregister()
     def state(self):
-        return States.FollowTarget
+        return States.FOLLOW_TARGET
 
     def get_angle(self, point):
         return math.atan2(point.y, point.z)
@@ -183,13 +185,13 @@ class FollowTarget(EmptyState):
         if (len(message.markers) ==  0):
           return
         self.lost_target_counter = 0
-        curr_marker = marker.markers[0]
-        self.turn_angle = get_angle(curr_marker.pose.pose.position)
-        self.distance = get_distance(curr_marker.pose.pose.position)
+        curr_marker = message.markers[0]
+        self.turn_angle = self.get_angle(curr_marker.pose.pose.position)
+        self.distance = self.get_distance(curr_marker.pose.pose.position)
         self.stale = False
 
     def execute(self):
-        if stale:
+        if self.stale:
             self.lost_target_counter += 1
             if self.lost_target_counter >= self.target_considered_lost:
                 # target considered lost, move to search mode
@@ -198,16 +200,16 @@ class FollowTarget(EmptyState):
                 # do nothing this iteration
                 return
 
-        stale = True
+        self.stale = True
 
-        if turn_angle:
-          if (distance > 0.5):
+        if self.turn_angle:
+          if (self.distance > 0.5):
             forward = 0.15
-          elif (distance < 0.4):
+          elif (self.distance < 0.4):
             forward = -0.15
           else:
             forward = 0.0
-          msg = Twist(Vector3(forward, 0.0, 0.0), Vector3(0.0, 0.0, 2*turn_angle))
+          msg = Twist(Vector3(forward, 0.0, 0.0), Vector3(0.0, 0.0, 2*self.turn_angle))
         else:
           angle = 0.5
           msg = Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.5))
@@ -393,6 +395,7 @@ class StateMachine:
         print 'end init state_machine'
 
     def state_factory(self, state):
+        print "factory ", state
         if state == States.START:
             return Start()
         elif state == States.FIESTA:
@@ -470,6 +473,12 @@ class VoiceHandler:
             elif voice_constants.END_LOCATION in msg.data:
                 self.state_machine.take_action(Actions.END_LOCATION)
                 self.voice_actions_pub.publish(Actions.END_LOCATION)
+            elif voice_constants.BEGIN_FOLLOW in msg.data:
+                self.state_machine.take_action(Actions.BEGIN_FOLLOW)
+                self.voice_actions_pub.publish(Actions.BEGIN_FOLLOW)
+            elif voice_constants.END_FOLLOW in msg.data:
+                self.state_machine.take_action(Actions.END_FOLLOW)
+                self.voice_actions_pub.publish(Actions.END_FOLLOW)
 
             #Music Commands
             if msg.data in self.music_corpus:
