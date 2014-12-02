@@ -16,7 +16,7 @@ MUSIC_ROOT = os.environ['HOME'] + '/dream_machine_music'
 class CorpusBuilder:
 
   def build_corpus(self):
-    corpus_file = open(SCRIPT_DIR + '/../voice/dream_machine_corpus.corpus', 'w')
+    corpus_file = open('/home/motionlab/catkin_ws/src/dream_machine/voice/commands.corpus', 'w')
 
     voice_constant_names = [x for x in dir(voice_constants) if not x.startswith('_')]
     voice_constant_values = [getattr(voice_constants, x) for x in voice_constant_names]

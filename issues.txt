@@ -6,6 +6,8 @@ bugs:
 features:
 	map & location mode (in progress)
 	follow mode
+    - start ar_track_alvar
+    - add new states for follow mode
 	lights
 
 enhancements:
@@ -13,4 +15,12 @@ enhancements:
 		- "Refused to execute script from 'https://raw.githubusercontent.com/duanewilson/bootstrap-player/master/js/bootstrap-player.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled."
 		- seems like using the js directly is not working properly
 
-
+what to run where:
+  robot:
+    - music_player
+    - state_machine
+    - ar_track_alvar
+  PC:
+    - recognizer
+    - web_server
+    - web_video_server

@@ -1,16 +1,37 @@
 begin fiesta
+begin follow
+begin location
+delete
+delete
 end fiesta
+end follow
+end location
+list position
+list region
+goto
+move region
 pause
 play
+print position
+print region
 reset
+save position
+save region
+save this
 stop
 unpause
 volume down
 volume up
+where am i
 play energy
 play cirrus
 play beautiful
 play baby
 play recurring
+play i
 play silver
 play never
+door
+charging
+center
+home

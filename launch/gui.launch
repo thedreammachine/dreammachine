@@ -4,7 +4,7 @@
     <param name="dict" value="$(find dream_machine)/voice/commands.dic"/>
   </node>
 
-  <node name="state_machine" type="state_machine.py" pkg="dream_machine">
+  <node name="state_machine" type="state_machine.py" pkg="dream_machine" output="screen">
   	<remap from="cmd_vel" to="mobile_base/commands/velocity"/>
   </node>
 

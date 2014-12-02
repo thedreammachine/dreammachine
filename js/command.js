@@ -74,50 +74,50 @@ $( document ).ready(function() {
     	clearInterval(base_interval);
     }
 
-    // Mouse Arrows
-    $(document).keypress(function(e){
-        if (e.keyCode == 38) { 
-            var params = {type:"base", x:0.1, y:0, z:0};
-            base_interval = setInterval(function() {
-                $.get("/", params); 
-                }, 500
-            );
-            return false;
-        }
-    });
+    // // Mouse Arrows
+    // $(document).keypress(function(e){
+    //     if (e.keyCode == 38) { 
+    //         var params = {type:"base", x:0.1, y:0, z:0};
+    //         base_interval = setInterval(function() {
+    //             $.get("/", params); 
+    //             }, 500
+    //         );
+    //         return false;
+    //     }
+    // });
 
-    $(document).keypress(function(e){
-        if (e.keyCode == 37) { 
-            var params = {type:"base", x:0, y:0, z:0.3};
-            base_interval = setInterval(function() {
-                $.get("/", params); 
-                }, 500
-            );
-            return false;
-        }
-    });
+    // $(document).keypress(function(e){
+    //     if (e.keyCode == 37) { 
+    //         var params = {type:"base", x:0, y:0, z:0.3};
+    //         base_interval = setInterval(function() {
+    //             $.get("/", params); 
+    //             }, 500
+    //         );
+    //         return false;
+    //     }
+    // });
 
-    $(document).keypress(function(e){
-        if (e.keyCode == 39) { 
-            var params = {type:"base", x:0, y:0, z:-0.3};
-            base_interval = setInterval(function() {
-                $.get("/", params); 
-                }, 500
-            );
-            return false;
-        }
-    });
+    // $(document).keypress(function(e){
+    //     if (e.keyCode == 39) { 
+    //         var params = {type:"base", x:0, y:0, z:-0.3};
+    //         base_interval = setInterval(function() {
+    //             $.get("/", params); 
+    //             }, 500
+    //         );
+    //         return false;
+    //     }
+    // });
 
-    $(document).keypress(function(e){
-        if (e.keyCode == 40) { 
-            var params = {type:"base", x:-0.1, y:0, z:0};
-            base_interval = setInterval(function() {
-                $.get("/", params); 
-                }, 500
-            );
-            return false;
-        }
-    });
+    // $(document).keypress(function(e){
+    //     if (e.keyCode == 40) { 
+    //         var params = {type:"base", x:-0.1, y:0, z:0};
+    //         base_interval = setInterval(function() {
+    //             $.get("/", params); 
+    //             }, 500
+    //         );
+    //         return false;
+    //     }
+    // });
 
     // MUSIC
     $("#music-dropdown li").click(function() {
@@ -177,7 +177,7 @@ $( document ).ready(function() {
         height : 420
     });
 
-    nav = new NAV2D.OccupancyGridClientNav({
+    var nav = new NAV2D.OccupancyGridClientNav({
         ros : ros,
         rootObject : viewer.scene,
         viewer : viewer,

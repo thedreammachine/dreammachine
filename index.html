@@ -15,6 +15,7 @@
         2) roslaunch dream_machine robot.launch (on turtlebot)
         3) rosrun robot_pose_publisher robot_pose_publisher (on turtlebot - for the map)
         4) roslaunch turtlebot_navigation amcl_demo.launch map_file:=/home/turtlebot/maps/003d.map.yaml (on turtlebot - for the map)
+        5) roslaunch turtlebot_rviz_launchers view_navigation.launch (locally - to see rviz)
         5) roslaunch rosbridge_server rosbridge_websocket.launch (on turtlebot)
         6) "setrobot softshell" -> launch the gui (setrobot softshell)
         7) http://localhost:31337
@@ -115,7 +116,8 @@
 
         <ul class="nav nav-tabs" role="tablist" id="command-tabs">
           <li role="presentation" class="active"><a href="#movement-tab" role="tab" data-toggle="tab">Movement</a></li>
-          <li role="presentation"><a href="#voice-tab" role="tab" data-toggle="tab">Voice</a></li>
+          <li role="presentation"><a href="#instruction-tab" role="tab" data-toggle="tab">Voice Instr.</a></li>
+          <li role="presentation"><a href="#voice-tab" role="tab" data-toggle="tab">Voice Output</a></li>
         </ul>
 
         <!-- arrow commands -->
@@ -178,6 +180,49 @@
             <div id="previous-commands">
               <h3>Previous Commands</h3>
                 <ol id="command-list" class="list-group"></ol>
+            </div>
+          </div>
+
+          <!-- list of available commands -->
+          <div role="tabpanel" class="tab-pane" id="instruction-tab">
+            <div id="available-commands">
+              <h3>Available Commands</h3>
+                <h4>Music Playing</h4>
+                <ol id="command-list" class="list-group">
+                  <li class="list-group-item">Play</li>
+                  <li class="list-group-item">Pause</li>
+                  <li class="list-group-item">Unpause</li>
+                  <li class="list-group-item">Stop</li>
+                  <li class="list-group-item">Volume Up</li>
+                  <li class="list-group-item">Volume Down</li>
+                </ol>
+                <h4>Music Choice</h4>
+                <ol id="command-list" class="list-group">
+                  <li class="list-group-item">Play Beautiful</li>
+                  <li class="list-group-item">Play Never</li>
+                  <li class="list-group-item">Play Baby</li>
+                  <li class="list-group-item">Play Cirrus</li>
+                  <li class="list-group-item">Play Silver</li>
+                  <li class="list-group-item">Play Energy</li>
+                  <li class="list-group-item">Play Recurring</li>
+                </ol>
+                <h4>Switching Modes</h4>
+                <ol id="command-list" class="list-group">
+                  <li class="list-group-item">Reset</li>
+                  <li class="list-group-item">Begin Fiesta</li>
+                  <li class="list-group-item">End Fiesta</li>
+                  <li class="list-group-item">Begin Location</li>
+                  <li class="list-group-item">End Location</li>
+                  <!-- <li class="list-group-item">Begin Follow</li> -->
+                  <!-- <li class="list-group-item">End Follow</li> -->
+                </ol>
+                <h4>Location Mode Specific</h4>
+                <ol id="command-list" class="list-group">
+                  <li class="list-group-item">Goto Home</li>
+                  <li class="list-group-item">Goto Center</li>
+                  <li class="list-group-item">Goto Charging</li>
+                  <li class="list-group-item">Goto Door</li>
+                </ol>
             </div>
           </div>
         </div>

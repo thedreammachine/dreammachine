@@ -31,9 +31,23 @@ body {
   overflow: scroll;
 }
 
+#available-commands {
+  height: 500px;
+  overflow: scroll;
+}
+
+#available-commands h4 {
+  text-align: left;
+  margin-left: 25px;
+}
+
 #image-div, #command-div, #music-div {
   padding: 10px 10px;
   text-align: center;
+}
+
+#list-group-item {
+  right: 10px;
 }
 
 #arrow-commands {
