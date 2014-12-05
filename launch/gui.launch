@@ -4,11 +4,9 @@
     <param name="dict" value="$(find dream_machine)/voice/commands.dic"/>
   </node>
 
-  <node name="state_machine" type="state_machine.py" pkg="dream_machine" output="screen">
-  	<remap from="cmd_vel" to="mobile_base/commands/velocity"/>
-  </node>
-
   <node name ="web_video_server" type="web_video_server" pkg="web_video_server"/>
 
   <node name="web_server" type="web_server.py" pkg="dream_machine"/>
+
+  <include file="$(find turtlebot_rviz_launchers)/launch/view_navigation.launch"/>
 </launch>

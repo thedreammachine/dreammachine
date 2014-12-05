@@ -1,3 +1,16 @@
 <launch>
   <node name="music_player" type="music_player.py" pkg="dream_machine"/>
+  <node name="robot_pose_publisher" type="robot_pose_publisher" pkg="robot_pose_publisher"/>
+
+  <include file="$(find turtlebot_navigation)/launch/amcl_demo.launch">
+    <arg name="map_file" value="/home/turtlebot/maps/003d.map.yaml"/>
+  </include>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+<!--  <include file="$(find ar_track_alvar)/launch/turtlebot_indiv.launch"/> -->
+
+  <node name="state_machine" type="state_machine.py" pkg="dream_machine" output="screen">
+  	<remap from="cmd_vel" to="mobile_base/commands/velocity"/>
+  </node>
+
 </launch>

@@ -152,7 +152,7 @@ class SearchTarget(EmptyState):
         self.cmd_vel_pub.publish(Twist(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.3)))
 
     def take_action(self, action):
-        if action == END_FOLLOW:
+        if action == Actions.END_FOLLOW:
             return States.START
         else:
             return None
@@ -223,7 +223,7 @@ class FollowTarget(EmptyState):
 
 region_radius = 1.0
 NULL_STRING_COMMAND = "null"
-LOCATION_FILE_NAME = '/home/motionlab/catkin_ws/src/dream_machine/location_info.txt'
+LOCATION_FILE_NAME = '/home/turtlebot/maps/location_info.txt'
 
 def sign(x):
     if x < 0:
@@ -297,22 +297,14 @@ class Location(EmptyState):
 
             if voice_constants.MOVE_POSITION in temp_command_string:
                 print "goto"
-                if len(tokens) >= 2 and not tokens[1] in self.pos_dict:
+                if len(tokens) != 2:
+                    print 'no position given'
+                    return
+                if not tokens[1] in self.pos_dict:
                     print 'no such position:', tokens[1]
                     return
                 self.last_command_loc = tokens[1]
                 self.goto(self.pos_dict[tokens[1]])
-            elif voice_constants.MOVE_REGION in temp_command_string:
-                if len(tokens) >= 2 and not tokens[1] in self.region_dict:
-                    print 'no such region:', tokens[1]
-                    return
-                (x, y) = self.region_dict[tokens[1]]
-                t = 2*math.pi*random.random()
-                u = random.random() + random.random()
-                r = 2-u if u > 1 else u
-                (randomX, randomY) = [region_radius*r*math.cos(t), region_radius*r*math.sin(t)]
-                self.last_command_loc = tokens[1]
-                self.goto([x + randomX, y + randomY, 0])
 
             elif voice_constants.LIST_POSITION in temp_command_string:
                 print self.pos_dict.keys()
